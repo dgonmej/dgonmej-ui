@@ -1,0 +1,4 @@
+node_modules
+dist
+# Configuracion local de previsualizacion (rutas de esta maquina)
+.claude/launch.json

@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Playground dgonmej-ui</title>
+    <link rel="stylesheet" href="../src/tokens/tokens.css" />
+    <link rel="stylesheet" href="./phone.css" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        font-family: var(--ui-font-family);
+        font-size: var(--ui-font-size-body);
+        line-height: var(--ui-line-height-body);
+        color: var(--ui-color-text);
+        background: var(--ui-gradient-ambient), var(--ui-color-background);
+        background-attachment: fixed;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      :root {
+        /* Donde se pegan los paneles al hacer scroll: justo bajo la barra superior,
+           a la misma altura a la que empiezan sin scroll */
+        --pg-sticky-top: calc(57px + var(--ui-space-2) + env(safe-area-inset-top));
+      }
+
+      .layout {
+        display: grid;
+        grid-template-areas:
+          'picker'
+          'stage'
+          'controls'
+          'code';
+        gap: var(--ui-space-4);
+        max-width: 1440px;
+        margin: 0 auto;
+        padding:
+          var(--ui-space-2)
+          calc(var(--ui-space-4) + env(safe-area-inset-right))
+          calc(var(--ui-space-8) + env(safe-area-inset-bottom))
+          calc(var(--ui-space-4) + env(safe-area-inset-left));
+      }
+
+      @media (min-width: 900px) {
+        .layout {
+          grid-template-columns: minmax(0, 1fr) 320px;
+          grid-template-rows: auto auto 1fr;
+          grid-template-areas:
+            'picker picker'
+            'stage controls'
+            'code controls';
+          align-items: start;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .layout {
+          grid-template-columns: 220px minmax(0, 1fr) 320px;
+          grid-template-rows: auto 1fr;
+          grid-template-areas:
+            'sidebar stage controls'
+            'sidebar code controls';
+        }
+        .picker {
+          display: none;
+        }
+      }
+
+      .panel {
+        border-radius: var(--ui-radius-lg);
+        background: var(--ui-color-surface);
+        box-shadow:
+          inset 0 0 0 1px var(--ui-color-border),
+          var(--ui-shadow-sm);
+      }
+
+      .panel-title {
+        margin: 0;
+        color: var(--ui-color-text-muted);
+        font-size: var(--ui-font-size-footnote);
+        font-weight: 600;
+      }
+
+      /* Selector de componente (estrecho) */
+      .picker {
+        grid-area: picker;
+      }
+
+      /* Barra lateral (ancho) */
+      .sidebar {
+        grid-area: sidebar;
+        display: none;
+        position: sticky;
+        top: var(--pg-sticky-top);
+        max-height: calc(100dvh - var(--pg-sticky-top) - var(--ui-space-4));
+        overflow: auto;
+        padding: var(--ui-space-2);
+      }
+      @media (min-width: 1200px) {
+        .sidebar {
+          display: block;
+        }
+      }
+      .sidebar .group {
+        margin: var(--ui-space-3) var(--ui-space-3) var(--ui-space-1);
+        color: var(--ui-color-text-muted);
+        font-size: var(--ui-font-size-caption);
+        font-weight: 600;
+      }
+      .sidebar .group:first-child {
+        margin-top: var(--ui-space-1);
+      }
+      .sidebar button {
+        display: block;
+        width: 100%;
+        margin-block: 2px;
+        min-height: 36px;
+        padding: 6px var(--ui-space-3);
+        line-height: 1.3;
+        border: 0;
+        border-radius: var(--ui-radius-sm);
+        background: transparent;
+        color: var(--ui-color-text);
+        font: inherit;
+        font-size: var(--ui-font-size-subhead);
+        text-align: left;
+        cursor: pointer;
+        transition: background-color var(--ui-duration-fast) var(--ui-ease-standard);
+      }
+      @media (hover: hover) {
+        .sidebar button:hover {
+          background: var(--ui-color-fill);
+        }
+      }
+      .sidebar button[aria-current='true'] {
+        color: var(--ui-color-primary-text);
+        background: var(--ui-color-primary-tint);
+        font-weight: 600;
+      }
+      .sidebar button:focus-visible {
+        outline: 2px solid var(--ui-color-focus);
+        outline-offset: -2px;
+      }
+
+      /* Escenario */
+      .stage-panel {
+        grid-area: stage;
+        overflow: hidden;
+      }
+      .stage-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--ui-space-3);
+        padding: var(--ui-space-3) var(--ui-space-4);
+        border-bottom: 1px solid var(--ui-color-separator);
+      }
+      /* Nombre del elemento (etiqueta HTML) bajo el nombre del componente */
+      .tag-name {
+        display: block;
+        margin-top: 2px;
+        color: var(--ui-color-text-muted);
+        font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+        font-size: var(--ui-font-size-caption);
+        font-weight: 400;
+        letter-spacing: 0;
+      }
+      .stage-toolbar h1 {
+        margin: 0;
+        font-family: var(--ui-font-family-display);
+        font-size: var(--ui-font-size-title2);
+        font-weight: 700;
+        letter-spacing: var(--ui-letter-spacing-tight);
+      }
+      .stage-toolbar .tools {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ui-space-2);
+      }
+      .stage {
+        display: grid;
+        place-items: center;
+        min-height: 380px;
+        padding: var(--ui-space-8) var(--ui-space-4);
+        background: var(--ui-color-background);
+        transition: background var(--ui-duration-base) var(--ui-ease-standard);
+      }
+      .stage[data-bg='color'] {
+        background:
+          radial-gradient(70% 90% at 15% 20%, #5ac8fa, transparent 70%),
+          radial-gradient(60% 80% at 85% 80%, #ff9f0a, transparent 70%),
+          linear-gradient(135deg, #34c759, #007aff);
+      }
+      .frame {
+        width: 100%;
+        max-width: var(--_frame, 100%);
+        transition: max-width var(--ui-duration-slow) var(--ui-ease-standard);
+      }
+      .frame > .center {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: var(--ui-space-3);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .frame,
+        .stage {
+          transition: none;
+        }
+      }
+
+      /* Codigo */
+      .code-panel {
+        grid-area: code;
+        overflow: hidden;
+      }
+      .code-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--ui-space-2);
+        padding: var(--ui-space-2) var(--ui-space-2) var(--ui-space-2) var(--ui-space-4);
+        border-bottom: 1px solid var(--ui-color-separator);
+      }
+      pre {
+        margin: 0;
+        padding: var(--ui-space-4);
+        overflow: auto;
+        max-height: 360px;
+        color: var(--ui-color-text);
+        background: var(--ui-color-fill);
+        font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+        font-size: var(--ui-font-size-footnote);
+        line-height: 1.6;
+        tab-size: 2;
+      }
+      pre + .code-head {
+        border-top: 1px solid var(--ui-color-separator);
+      }
+
+      /* Controles */
+      .controls {
+        grid-area: controls;
+        display: grid;
+        gap: var(--ui-space-4);
+      }
+      @media (min-width: 900px) {
+        .controls {
+          position: sticky;
+          top: var(--pg-sticky-top);
+          max-height: calc(100dvh - var(--pg-sticky-top) - var(--ui-space-4));
+          overflow: auto;
+          padding-bottom: var(--ui-space-2);
+        }
+      }
+      .controls .panel {
+        display: grid;
+        gap: var(--ui-space-4);
+        padding: var(--ui-space-4);
+      }
+      .control-label {
+        display: block;
+        margin: 0 0 var(--ui-space-2) var(--ui-space-1);
+        color: var(--ui-color-text);
+        font-size: var(--ui-font-size-subhead);
+        font-weight: 600;
+      }
+      .control-label code,
+      .prop {
+        color: var(--ui-color-text-muted);
+        font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+        font-size: var(--ui-font-size-caption);
+        font-weight: 400;
+      }
+      .control dgonmej-ui-segmented-control {
+        display: block;
+      }
+      .switch-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--ui-space-2);
+        margin: calc(var(--ui-space-2) * -1) 0;
+      }
+      .swatches {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ui-space-2);
+      }
+      .swatch {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: var(--_swatch);
+        box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.1);
+        cursor: pointer;
+        transition: transform var(--ui-duration-fast) var(--ui-ease-standard);
+      }
+      .swatch[aria-pressed='true'] {
+        box-shadow:
+          0 0 0 2px var(--ui-color-surface),
+          0 0 0 4px var(--ui-color-focus);
+      }
+      .swatch:active {
+        transform: scale(0.92);
+      }
+      .swatch:focus-visible {
+        outline: 2px solid var(--ui-color-focus);
+        outline-offset: 4px;
+      }
+
+      .phone-scroll .filler {
+        height: 72px;
+        margin-bottom: var(--ui-space-3);
+        border-radius: var(--ui-radius-md);
+        background: var(--ui-color-surface);
+        box-shadow: var(--ui-shadow-sm);
+      }
+      .slide {
+        display: flex;
+        align-items: flex-end;
+        aspect-ratio: 16 / 9;
+        padding: var(--ui-space-5) var(--ui-space-6) calc(var(--ui-space-8) + var(--ui-space-6));
+        color: #fff;
+        font-family: var(--ui-font-family-display);
+        font-size: var(--ui-font-size-title1);
+        font-weight: 700;
+        letter-spacing: var(--ui-letter-spacing-tight);
+        text-shadow: 0 1px 12px rgb(0 0 0 / 0.25);
+      }
+      .media-art {
+        aspect-ratio: 16 / 9;
+        background:
+          radial-gradient(80% 90% at 20% 10%, #64d2ff, transparent 70%),
+          linear-gradient(160deg, #0a84ff, #0040a8);
+      }
+      .sample-title {
+        margin: 0 0 var(--ui-space-1);
+        font-size: var(--ui-font-size-body);
+        font-weight: 700;
+      }
+      .sample-text {
+        margin: 0;
+        color: var(--ui-color-text-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <dgonmej-ui-nav-bar heading="Playground" style="--ui-nav-bar-max-width: 1408px">
+      <dgonmej-ui-button slot="leading" variant="ghost" id="back">
+        <dgonmej-ui-icon name="chevron-left"></dgonmej-ui-icon>Demo
+      </dgonmej-ui-button>
+      <dgonmej-ui-theme-toggle slot="trailing" compact></dgonmej-ui-theme-toggle>
+    </dgonmej-ui-nav-bar>
+
+    <div class="layout">
+      <dgonmej-ui-select class="picker" id="picker" label="Componente"></dgonmej-ui-select>
+
+      <nav class="sidebar panel" id="sidebar" aria-label="Componentes"></nav>
+
+      <section class="stage-panel panel" aria-labelledby="component-name">
+        <div class="stage-toolbar">
+          <div>
+            <h1 id="component-name">Componente</h1>
+            <code class="tag-name" id="component-tag"></code>
+          </div>
+          <div class="tools">
+            <dgonmej-ui-segmented-control id="bg" size="small" label="Fondo" value="plain"></dgonmej-ui-segmented-control>
+            <dgonmej-ui-segmented-control id="width" size="small" label="Ancho" value="full"></dgonmej-ui-segmented-control>
+          </div>
+        </div>
+        <div class="stage" id="stage" data-bg="plain">
+          <div class="frame" id="frame"></div>
+        </div>
+      </section>
+
+      <section class="code-panel panel" aria-label="Código">
+        <div class="code-head">
+          <p class="panel-title">HTML</p>
+          <dgonmej-ui-button size="small" variant="secondary" data-copy="code-html">Copiar</dgonmej-ui-button>
+        </div>
+        <pre><code id="code-html"></code></pre>
+        <div class="code-head" id="js-head">
+          <p class="panel-title">JavaScript</p>
+          <dgonmej-ui-button size="small" variant="secondary" data-copy="code-js">Copiar</dgonmej-ui-button>
+        </div>
+        <pre id="js-pre"><code id="code-js"></code></pre>
+        <div class="code-head" id="css-head">
+          <p class="panel-title">CSS global (tokens)</p>
+          <dgonmej-ui-button size="small" variant="secondary" data-copy="code-css">Copiar</dgonmej-ui-button>
+        </div>
+        <pre id="css-pre"><code id="code-css"></code></pre>
+      </section>
+
+      <aside class="controls" aria-label="Opciones">
+        <div class="panel">
+          <p class="panel-title">Propiedades</p>
+          <div id="props" style="display: grid; gap: var(--ui-space-4)"></div>
+        </div>
+        <div class="panel">
+          <p class="panel-title">Tema global</p>
+          <div class="control">
+            <span class="control-label" id="accent-label">Color de acento</span>
+            <div class="swatches" id="swatches" role="group" aria-labelledby="accent-label"></div>
+          </div>
+          <div class="control">
+            <span class="control-label">Redondez</span>
+            <dgonmej-ui-segmented-control id="roundness" size="small" label="Redondez" value="normal"></dgonmej-ui-segmented-control>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <dgonmej-ui-toast id="toast" placement="bottom"></dgonmej-ui-toast>
+
+    <script type="module" src="../src/index.js"></script>
+    <script type="module" src="./playground.js"></script>
+  </body>
+</html>

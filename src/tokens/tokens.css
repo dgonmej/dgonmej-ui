@@ -1,0 +1,186 @@
+/*
+ * Design tokens: la unica fuente de verdad visual.
+ * Se importa UNA vez en la app consumidora (Angular, Astro, lo que sea).
+ * Cada componente lee estas variables con fallback, asi que la libreria
+ * funciona incluso si el consumidor no importa este archivo.
+ *
+ * Direccion visual inspirada en Apple: base neutra, un acento azul dominante,
+ * gradientes suaves de colores vecinos, materiales translucidos y movimiento corto.
+ * Todos los pares texto/fondo cumplen WCAG AA.
+ */
+:root {
+  color-scheme: light;
+
+  /* Color */
+  --ui-color-primary: #0066cc;
+  --ui-color-primary-hover: #0058b0;
+  --ui-color-primary-contrast: #ffffff;
+  --ui-color-primary-tint: rgb(0 113 227 / 0.12);
+  --ui-color-primary-glow: rgb(0 113 227 / 0.4);
+  --ui-color-primary-text: #0066cc;
+  --ui-color-danger: #c4001a;
+  --ui-color-danger-glow: rgb(196 0 26 / 0.35);
+  --ui-color-success: #1a7030;
+  --ui-color-warning: #9a4a00;
+  --ui-tint-strength: 12%;
+  --ui-color-background: #f5f5f7;
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-hover: #f2f2f5;
+  --ui-color-surface-pressed: #e8e8ed;
+  --ui-color-fill: rgb(120 120 128 / 0.12);
+  --ui-color-fill-strong: rgb(120 120 128 / 0.22);
+  --ui-color-backdrop: rgb(0 0 0 / 0.32);
+  --ui-color-separator: rgb(60 60 67 / 0.14);
+  --ui-color-border: rgb(0 0 0 / 0.08);
+  --ui-color-text: #1d1d1f;
+  --ui-color-text-muted: #6e6e73;
+  --ui-color-focus: #0071e3;
+
+  /* Gradientes (colores vecinos, con texto blanco AA encima) */
+  --ui-gradient-primary: linear-gradient(180deg, #0071e3 0%, #005bbf 100%);
+  --ui-gradient-danger: linear-gradient(180deg, #d92d24 0%, #b8131a 100%);
+  --ui-gradient-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.22) 0%, rgb(255 255 255 / 0) 55%);
+  --ui-gradient-ambient:
+    radial-gradient(60% 50% at 10% 0%, rgb(0 122 255 / 0.14), transparent 70%),
+    radial-gradient(50% 45% at 95% 10%, rgb(90 200 250 / 0.16), transparent 70%),
+    radial-gradient(55% 50% at 60% 100%, rgb(255 149 0 / 0.08), transparent 70%);
+
+  /* Materiales (controles flotantes) */
+  --ui-material-bg: rgb(250 250 252 / 0.94);
+  --ui-material-bg-translucent: rgb(255 255 255 / 0.6);
+  --ui-material-border: rgb(255 255 255 / 0.55);
+  --ui-material-text: #1d1d1f;
+  --ui-material-blur: blur(20px) saturate(180%);
+
+  /* Espaciado (rejilla de 4/8px) */
+  --ui-space-1: 4px;
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-4: 16px;
+  --ui-space-5: 20px;
+  --ui-space-6: 24px;
+  --ui-space-8: 32px;
+
+  /* Tipografia (escala inspirada en iOS) */
+  --ui-font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --ui-font-family-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  --ui-font-size-caption: 0.75rem;     /* 12 */
+  --ui-font-size-footnote: 0.8125rem;  /* 13 */
+  --ui-font-size-subhead: 0.9375rem;   /* 15 */
+  --ui-font-size-body: 1.0625rem;      /* 17 */
+  --ui-font-size-title3: 1.25rem;      /* 20 */
+  --ui-font-size-title2: 1.375rem;     /* 22 */
+  --ui-font-size-title1: 1.75rem;      /* 28 */
+  --ui-font-size-large-title: 2.125rem; /* 34 */
+  --ui-letter-spacing-tight: -0.02em;
+  --ui-line-height-body: 1.45;
+
+  /* Forma */
+  --ui-radius-sm: 6px;
+  --ui-radius-md: 10px;
+  --ui-radius-lg: 16px;
+  --ui-radius-pill: 999px;
+  /* Forma de los controles (botones, badges, switch, segmentado, progreso, toasts...):
+     999px = capsula (por defecto), var(--ui-radius-md) = redondeada, 2px = recta */
+  --ui-radius-control: 999px;
+  /* Escala para radios proporcionales al tamano (p. ej. avatar redondeado) */
+  --ui-radius-scale: 1;
+  --ui-control-height: 44px;
+
+  /* Sombras en capas: una corta y nitida + una larga y difusa */
+  --ui-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06), 0 1px 1px rgb(0 0 0 / 0.04);
+  --ui-shadow-md: 0 1px 3px rgb(0 0 0 / 0.06), 0 8px 24px -8px rgb(0 0 0 / 0.14);
+  --ui-shadow-lg: 0 2px 6px rgb(0 0 0 / 0.06), 0 24px 48px -16px rgb(0 0 0 / 0.22);
+
+  /* Movimiento */
+  --ui-ease-standard: cubic-bezier(0.32, 0.72, 0, 1);
+  --ui-ease-out: cubic-bezier(0.25, 0.8, 0.25, 1);
+  --ui-duration-fast: 160ms;
+  --ui-duration-base: 260ms;
+  --ui-duration-slow: 400ms;
+}
+
+/*
+ * Tema oscuro. Se aplica con data-theme="dark" en <html> o <body>,
+ * o automaticamente segun el sistema salvo que se fuerce data-theme="light".
+ * (El bloque se repite porque CSS no permite compartirlo entre ambos selectores.)
+ */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --ui-color-primary: #0a84ff;
+  --ui-color-primary-hover: #409cff;
+  --ui-color-primary-tint: rgb(10 132 255 / 0.18);
+  --ui-color-primary-glow: rgb(10 132 255 / 0.45);
+  --ui-color-primary-text: #409cff;
+  --ui-color-danger: #ff6961;
+  --ui-color-danger-glow: rgb(255 69 58 / 0.35);
+  --ui-color-success: #30d158;
+  --ui-color-warning: #ffb340;
+  --ui-tint-strength: 16%;
+  --ui-color-background: #000000;
+  --ui-color-surface: #1c1c1e;
+  --ui-color-surface-hover: #242426;
+  --ui-color-surface-pressed: #2c2c2e;
+  --ui-color-fill: rgb(120 120 128 / 0.24);
+  --ui-color-fill-strong: rgb(120 120 128 / 0.36);
+  --ui-color-backdrop: rgb(0 0 0 / 0.5);
+  --ui-color-separator: rgb(84 84 88 / 0.6);
+  --ui-color-border: rgb(255 255 255 / 0.08);
+  --ui-color-text: #f5f5f7;
+  --ui-color-text-muted: #98989d;
+  --ui-color-focus: #409cff;
+  --ui-gradient-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.14) 0%, rgb(255 255 255 / 0) 55%);
+  --ui-gradient-ambient:
+    radial-gradient(60% 50% at 10% 0%, rgb(10 132 255 / 0.22), transparent 70%),
+    radial-gradient(50% 45% at 95% 10%, rgb(100 210 255 / 0.14), transparent 70%),
+    radial-gradient(55% 50% at 60% 100%, rgb(191 90 242 / 0.1), transparent 70%);
+  --ui-material-bg: rgb(36 36 38 / 0.94);
+  --ui-material-bg-translucent: rgb(30 30 32 / 0.55);
+  --ui-material-border: rgb(255 255 255 / 0.12);
+  --ui-material-text: #f5f5f7;
+  --ui-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --ui-shadow-md: 0 1px 3px rgb(0 0 0 / 0.4), 0 8px 24px -8px rgb(0 0 0 / 0.6);
+  --ui-shadow-lg: 0 2px 6px rgb(0 0 0 / 0.4), 0 24px 48px -16px rgb(0 0 0 / 0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ui-color-primary: #0a84ff;
+    --ui-color-primary-hover: #409cff;
+    --ui-color-primary-tint: rgb(10 132 255 / 0.18);
+    --ui-color-primary-glow: rgb(10 132 255 / 0.45);
+    --ui-color-primary-text: #409cff;
+    --ui-color-danger: #ff6961;
+    --ui-color-danger-glow: rgb(255 69 58 / 0.35);
+    --ui-color-success: #30d158;
+    --ui-color-warning: #ffb340;
+    --ui-tint-strength: 16%;
+    --ui-color-background: #000000;
+    --ui-color-surface: #1c1c1e;
+    --ui-color-surface-hover: #242426;
+    --ui-color-surface-pressed: #2c2c2e;
+    --ui-color-fill: rgb(120 120 128 / 0.24);
+    --ui-color-fill-strong: rgb(120 120 128 / 0.36);
+    --ui-color-backdrop: rgb(0 0 0 / 0.5);
+  --ui-color-fill-strong: rgb(120 120 128 / 0.36);
+  --ui-color-backdrop: rgb(0 0 0 / 0.5);
+    --ui-color-separator: rgb(84 84 88 / 0.6);
+    --ui-color-border: rgb(255 255 255 / 0.08);
+    --ui-color-text: #f5f5f7;
+    --ui-color-text-muted: #98989d;
+    --ui-color-focus: #409cff;
+    --ui-gradient-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.14) 0%, rgb(255 255 255 / 0) 55%);
+    --ui-gradient-ambient:
+      radial-gradient(60% 50% at 10% 0%, rgb(10 132 255 / 0.22), transparent 70%),
+      radial-gradient(50% 45% at 95% 10%, rgb(100 210 255 / 0.14), transparent 70%),
+      radial-gradient(55% 50% at 60% 100%, rgb(191 90 242 / 0.1), transparent 70%);
+    --ui-material-bg: rgb(36 36 38 / 0.94);
+    --ui-material-bg-translucent: rgb(30 30 32 / 0.55);
+    --ui-material-border: rgb(255 255 255 / 0.12);
+    --ui-material-text: #f5f5f7;
+    --ui-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --ui-shadow-md: 0 1px 3px rgb(0 0 0 / 0.4), 0 8px 24px -8px rgb(0 0 0 / 0.6);
+    --ui-shadow-lg: 0 2px 6px rgb(0 0 0 / 0.4), 0 24px 48px -16px rgb(0 0 0 / 0.7);
+  }
+}

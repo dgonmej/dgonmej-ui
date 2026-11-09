@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>dgonmej-ui</title>
+    <link rel="stylesheet" href="../src/tokens/tokens.css" />
+    <link rel="stylesheet" href="./phone.css" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 76px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        font-family: var(--ui-font-family);
+        font-size: var(--ui-font-size-body);
+        line-height: var(--ui-line-height-body);
+        color: var(--ui-color-text);
+        background: var(--ui-gradient-ambient), var(--ui-color-background);
+        background-attachment: fixed;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--ui-color-primary-text);
+      }
+      main {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding:
+          0
+          calc(var(--ui-space-4) + env(safe-area-inset-right))
+          calc(var(--ui-space-8) * 2 + env(safe-area-inset-bottom))
+          calc(var(--ui-space-4) + env(safe-area-inset-left));
+      }
+
+      /* Fondo de las vistas previas: gris claro en claro; gris elevado en oscuro, donde el
+         fondo de la pagina es negro y los campos (relleno translucido) siguen destacando */
+      :root {
+        --preview-bg: var(--ui-color-background);
+      }
+      [data-theme='dark'] {
+        --preview-bg: var(--ui-color-surface-pressed);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --preview-bg: var(--ui-color-surface-pressed);
+        }
+      }
+
+      /* En pantallas estrechas la barra superior usa versiones compactas */
+      .narrow-only {
+        display: none;
+      }
+      @media (max-width: 559px) {
+        .wide-only {
+          display: none;
+        }
+        .narrow-only {
+          display: inline-block;
+        }
+      }
+
+      /* ---------- Cabecera ---------- */
+      .hero {
+        display: grid;
+        gap: var(--ui-space-8);
+        align-items: center;
+        padding: var(--ui-space-8) 0 calc(var(--ui-space-8) * 1.5);
+      }
+      @media (min-width: 880px) {
+        .hero {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+      }
+      .hero h1 {
+        margin: 0;
+        font-family: var(--ui-font-family-display);
+        font-size: clamp(2.25rem, 5vw, 3.5rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.05;
+      }
+      .hero .lead {
+        max-width: 34em;
+        margin: var(--ui-space-4) 0 var(--ui-space-6);
+        color: var(--ui-color-text-muted);
+        font-size: var(--ui-font-size-title3);
+        line-height: 1.4;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ui-space-3);
+      }
+
+      /* Composicion de vidrio: el elemento memorable de la portada */
+      .showcase {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-height: 340px;
+        padding: var(--ui-space-6);
+        overflow: hidden;
+        border-radius: var(--ui-radius-lg);
+        background:
+          radial-gradient(60% 70% at 20% 15%, #64d2ff, transparent 70%),
+          radial-gradient(55% 60% at 90% 85%, #ff9f0a, transparent 70%),
+          radial-gradient(50% 60% at 85% 10%, #bf5af2, transparent 70%),
+          linear-gradient(140deg, #0a84ff, #30b158);
+        box-shadow: var(--ui-shadow-lg);
+      }
+      .showcase-stack {
+        display: grid;
+        gap: var(--ui-space-3);
+        width: min(100%, 340px);
+      }
+      .glass {
+        padding: var(--ui-space-4);
+        border-radius: var(--ui-radius-lg);
+        color: var(--ui-material-text);
+        background: var(--ui-material-bg);
+        border: 1px solid var(--ui-material-border);
+        box-shadow: var(--ui-shadow-md);
+      }
+      @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+        .glass {
+          background: var(--ui-material-bg-translucent);
+          -webkit-backdrop-filter: var(--ui-material-blur);
+          backdrop-filter: var(--ui-material-blur);
+        }
+      }
+      .glass-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--ui-space-3);
+      }
+      .glass-title {
+        margin: 0;
+        font-weight: 600;
+      }
+      .glass-sub {
+        margin: 0;
+        color: var(--ui-color-text-muted);
+        font-size: var(--ui-font-size-footnote);
+      }
+
+      /* ---------- Indice de secciones (salta de linea, nunca se corta) ---------- */
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ui-space-2);
+        margin: 0 0 var(--ui-space-8);
+        padding: 0;
+        list-style: none;
+      }
+      .toc a {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 36px;
+        padding: 0 var(--ui-space-4);
+        border-radius: var(--ui-radius-control);
+        color: var(--ui-color-text);
+        background: var(--ui-color-fill);
+        font-size: var(--ui-font-size-subhead);
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color var(--ui-duration-fast) var(--ui-ease-standard);
+      }
+      .toc a .count {
+        color: var(--ui-color-text-muted);
+        font-weight: 400;
+        font-variant-numeric: tabular-nums;
+      }
+      @media (hover: hover) {
+        .toc a:hover {
+          background: var(--ui-color-fill-strong);
+        }
+      }
+      .toc a:focus-visible {
+        outline: 2px solid var(--ui-color-focus);
+        outline-offset: 2px;
+      }
+      .toc a.accent {
+        color: var(--ui-color-primary-text);
+        background: var(--ui-color-primary-tint);
+      }
+
+      /* ---------- Secciones ---------- */
+      section {
+        margin-bottom: calc(var(--ui-space-8) * 2);
+      }
+      .section-head {
+        display: grid;
+        gap: var(--ui-space-1);
+        margin: 0 0 var(--ui-space-5);
+      }
+      h2 {
+        margin: 0;
+        font-family: var(--ui-font-family-display);
+        font-size: var(--ui-font-size-title1);
+        font-weight: 700;
+        letter-spacing: var(--ui-letter-spacing-tight);
+        line-height: 1.15;
+      }
+      .section-head p {
+        margin: 0;
+        color: var(--ui-color-text-muted);
+        font-size: var(--ui-font-size-subhead);
+      }
+
+      /* ---------- Galeria de componentes ---------- */
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+        gap: var(--ui-space-4);
+      }
+      .tile {
+        display: flex;
+        flex-direction: column;
+        border-radius: var(--ui-radius-lg);
+        background: var(--ui-color-surface);
+        /* Filo de 1px: en oscuro las sombras apenas se ven y la tarjeta se perderia */
+        box-shadow:
+          inset 0 0 0 1px var(--ui-color-border),
+          var(--ui-shadow-sm);
+        transition:
+          box-shadow var(--ui-duration-base) var(--ui-ease-standard),
+          transform var(--ui-duration-base) var(--ui-ease-standard);
+      }
+      @media (hover: hover) {
+        .tile:hover {
+          box-shadow:
+            inset 0 0 0 1px var(--ui-color-border),
+            var(--ui-shadow-md);
+        }
+      }
+      .preview {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: var(--ui-space-2);
+        min-height: 150px;
+        padding: var(--ui-space-5) var(--ui-space-4);
+        border-radius: var(--ui-radius-lg) var(--ui-radius-lg) 0 0;
+        /* Distinto del fondo de la pagina en ambos temas (ver --preview-bg) */
+        background: var(--preview-bg);
+        border-bottom: 1px solid var(--ui-color-separator);
+      }
+      .preview.block {
+        display: grid;
+        /* La columna ocupa exactamente el ancho disponible, sin crecer por su contenido */
+        grid-template-columns: minmax(0, 1fr);
+        align-content: center;
+      }
+      .preview.color {
+        background:
+          radial-gradient(70% 90% at 15% 20%, #5ac8fa, transparent 70%),
+          radial-gradient(60% 80% at 85% 80%, #ff9f0a, transparent 70%),
+          linear-gradient(135deg, #34c759, #007aff);
+      }
+      .tile-body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding: var(--ui-space-4);
+      }
+      .tile-body h3 {
+        margin: 0;
+        font-size: var(--ui-font-size-body);
+        font-weight: 600;
+      }
+      /* Nombre del elemento (etiqueta HTML) bajo el nombre del componente */
+      .tag-name {
+        display: block;
+        margin-top: 2px;
+        color: var(--ui-color-text-muted);
+        font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+        font-size: var(--ui-font-size-caption);
+        font-weight: 400;
+        letter-spacing: 0;
+      }
+      .tile-body p {
+        flex: 1;
+        margin: var(--ui-space-1) 0 var(--ui-space-3);
+        color: var(--ui-color-text-muted);
+        font-size: var(--ui-font-size-subhead);
+        line-height: 1.4;
+      }
+      .tile-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        align-self: flex-start;
+        color: var(--ui-color-primary-text);
+        font-size: var(--ui-font-size-subhead);
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 4px;
+      }
+      @media (hover: hover) {
+        .tile-link:hover {
+          text-decoration: underline;
+        }
+      }
+      .tile-link:focus-visible {
+        outline: 2px solid var(--ui-color-focus);
+        outline-offset: 2px;
+      }
+
+      /* Piezas pequenas de las vistas previas */
+      .mini-card {
+        width: 100%;
+        max-width: 220px;
+      }
+      .mini-title {
+        margin: 0;
+        font-weight: 600;
+        font-size: var(--ui-font-size-subhead);
+      }
+      .mini-text {
+        margin: 2px 0 0;
+        color: var(--ui-color-text-muted);
+        font-size: var(--ui-font-size-footnote);
+      }
+      .mini-nav {
+        width: 100%;
+        max-width: 240px;
+        overflow: hidden;
+        border-radius: var(--ui-radius-md);
+        background: var(--ui-color-surface);
+        box-shadow: var(--ui-shadow-sm);
+      }
+      .mini-nav .lines {
+        display: grid;
+        gap: 6px;
+        padding: var(--ui-space-3);
+      }
+      .mini-nav .lines span {
+        height: 8px;
+        border-radius: 4px;
+        background: var(--ui-color-fill);
+      }
+      .slide {
+        display: flex;
+        align-items: flex-end;
+        aspect-ratio: 16 / 9;
+        padding: var(--ui-space-5) var(--ui-space-6) calc(var(--ui-space-8) + var(--ui-space-6));
+        color: #fff;
+        font-family: var(--ui-font-family-display);
+        font-size: var(--ui-font-size-title1);
+        font-weight: 700;
+        letter-spacing: var(--ui-letter-spacing-tight);
+        text-shadow: 0 1px 12px rgb(0 0 0 / 0.25);
+      }
+      .slide.small {
+        padding: var(--ui-space-3) var(--ui-space-4) calc(var(--ui-space-8) + var(--ui-space-2));
+        font-size: var(--ui-font-size-body);
+      }
+      .slide-1 {
+        background:
+          radial-gradient(80% 90% at 20% 10%, #64d2ff, transparent 70%),
+          linear-gradient(160deg, #0a84ff, #0040a8);
+      }
+      .slide-2 {
+        background:
+          radial-gradient(70% 80% at 85% 0%, #ffcc00, transparent 65%),
+          linear-gradient(160deg, #f07800, #a82c00);
+      }
+      .slide-3 {
+        background:
+          radial-gradient(80% 90% at 30% 0%, #66d4cf, transparent 70%),
+          linear-gradient(160deg, #30b158, #0b6b3a);
+      }
+
+      /* ---------- Ejemplos completos ---------- */
+      .examples {
+        display: grid;
+        gap: var(--ui-space-6);
+      }
+      @media (min-width: 880px) {
+        .examples.two {
+          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+          align-items: start;
+        }
+      }
+      .panel {
+        padding: var(--ui-space-5);
+        border-radius: var(--ui-radius-lg);
+        background: var(--ui-color-surface);
+        box-shadow:
+          inset 0 0 0 1px var(--ui-color-border),
+          var(--ui-shadow-sm);
+      }
+      .panel-title {
+        margin: 0 0 var(--ui-space-4);
+        font-size: var(--ui-font-size-title3);
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .stack {
+        display: grid;
+        gap: var(--ui-space-4);
+      }
+      /* Titulo del telefono alineado con el del formulario (mismo padding superior que el panel) */
+      .phone-title {
+        margin: var(--ui-space-5) 0 0;
+        text-align: center;
+      }
+      .two-cols {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+        gap: var(--ui-space-4);
+      }
+
+      .group-label {
+        margin: var(--ui-space-5) 0 var(--ui-space-2) var(--ui-space-4);
+        color: var(--ui-color-text-muted);
+        font-size: var(--ui-font-size-footnote);
+      }
+
+      .profile {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--ui-space-5);
+        margin-bottom: var(--ui-space-6);
+      }
+      .profile h3 {
+        margin: 0;
+        font-family: var(--ui-font-family-display);
+        font-size: var(--ui-font-size-title2);
+        letter-spacing: var(--ui-letter-spacing-tight);
+      }
+      .profile p {
+        margin: 2px 0 0;
+        color: var(--ui-color-text-muted);
+      }
+
+      footer {
+        padding: var(--ui-space-6) 0;
+        border-top: 1px solid var(--ui-color-separator);
+        color: var(--ui-color-text-muted);
+        font-size: var(--ui-font-size-footnote);
+        text-align: center;
+      }
+
+      /* Unico momento orquestado: aparicion escalonada de la cabecera */
+      @media (prefers-reduced-motion: no-preference) {
+        .hero > * {
+          animation: reveal var(--ui-duration-slow) var(--ui-ease-standard) both;
+        }
+        .hero > :nth-child(2) {
+          animation-delay: 120ms;
+        }
+        @keyframes reveal {
+          from {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <dgonmej-ui-nav-bar heading="dgonmej-ui" style="--ui-nav-bar-max-width: 1120px">
+      <dgonmej-ui-button slot="trailing" variant="ghost" size="small" id="nav-playground" label="Playground">
+        <dgonmej-ui-icon name="sliders" size="16"></dgonmej-ui-icon><span class="wide-only">Playground</span>
+      </dgonmej-ui-button>
+      <dgonmej-ui-theme-toggle slot="trailing" compact class="wide-only"></dgonmej-ui-theme-toggle>
+      <dgonmej-ui-theme-toggle slot="trailing" variant="button" class="narrow-only"></dgonmej-ui-theme-toggle>
+    </dgonmej-ui-nav-bar>
+
+    <main>
+      <!-- Cabecera -->
+      <header class="hero">
+        <div>
+          <h1>Componentes web con alma de Apple</h1>
+          <p class="lead">
+            <span id="count">Más de 20</span> componentes Lit con tokens compartidos, modo oscuro y accesibilidad de serie. Funcionan igual en Angular,
+            Astro, React o HTML plano.
+          </p>
+          <div class="actions">
+            <dgonmej-ui-button variant="primary" size="large" data-href="./playground.html">
+              <dgonmej-ui-icon name="sliders"></dgonmej-ui-icon>Abrir el playground
+            </dgonmej-ui-button>
+            <dgonmej-ui-button variant="secondary" size="large" data-href="#componentes">Ver componentes</dgonmej-ui-button>
+          </div>
+        </div>
+        <div class="showcase" aria-label="Ejemplo de componentes sobre fondo de color">
+          <div class="showcase-stack">
+            <div class="glass">
+              <div class="glass-row">
+                <dgonmej-ui-avatar size="md" name="Diego González" status="online"></dgonmej-ui-avatar>
+                <div style="flex: 1">
+                  <p class="glass-title">Diego González</p>
+                  <p class="glass-sub">Desarrollador frontend</p>
+                </div>
+                <dgonmej-ui-badge variant="success" dot>Activo</dgonmej-ui-badge>
+              </div>
+            </div>
+            <div class="glass">
+              <dgonmej-ui-switch checked>Modo concentración</dgonmej-ui-switch>
+              <dgonmej-ui-segmented-control id="hero-seg" size="small" label="Periodo" value="week" style="display: block; margin-top: 12px"></dgonmej-ui-segmented-control>
+            </div>
+            <dgonmej-ui-audio-player
+              variant="compact"
+              live
+              heading="MínimaFM 97.9"
+              subheading="La voz del valle"
+              src="https://stream-176.zeno.fm/fjmbxsddqv1uv"
+              artwork="https://dgonmej.github.io/minimafm/images/logos/logo-minimafm.png"
+            ></dgonmej-ui-audio-player>
+          </div>
+        </div>
+      </header>
+
+      <!-- Indice -->
+      <nav aria-label="Secciones">
+        <ul class="toc" id="toc"></ul>
+      </nav>
+
+      <!-- Galeria de componentes (se genera por categorias) -->
+      <div id="componentes"></div>
+
+      <!-- Ejemplos completos -->
+      <section id="ejemplos">
+        <div class="section-head">
+          <h2>Ejemplos completos</h2>
+          <p>Componentes trabajando juntos en casos reales.</p>
+        </div>
+
+        <div class="examples two">
+          <form id="form" class="panel stack" novalidate>
+            <h3 class="panel-title">Formulario de alta</h3>
+            <dgonmej-ui-text-field label="Nombre" name="name" placeholder="Cómo te llamas" clearable required></dgonmej-ui-text-field>
+            <dgonmej-ui-text-field
+              id="email"
+              label="Correo"
+              name="email"
+              type="email"
+              placeholder="tu@correo.com"
+              helper="Solo lo usaremos para enviarte la factura"
+            ></dgonmej-ui-text-field>
+            <div class="two-cols">
+              <dgonmej-ui-text-field type="password" label="Contraseña" name="password"></dgonmej-ui-text-field>
+              <dgonmej-ui-text-field type="date" label="Fecha de alta" name="date"></dgonmej-ui-text-field>
+            </div>
+            <dgonmej-ui-select id="country" label="País" name="country" placeholder="Elige un país"></dgonmej-ui-select>
+            <dgonmej-ui-segmented-control id="billing" name="billing" label="Facturación" value="monthly"></dgonmej-ui-segmented-control>
+            <dgonmej-ui-radio-group id="plan" label="Plan" name="plan" value="pro"></dgonmej-ui-radio-group>
+            <dgonmej-ui-textarea label="Mensaje" name="message" placeholder="Cuéntanos qué necesitas" maxlength="280" autoresize></dgonmej-ui-textarea>
+            <div class="stack" style="gap: 0">
+              <dgonmej-ui-switch name="news" checked>Recibir novedades</dgonmej-ui-switch>
+              <dgonmej-ui-checkbox name="terms" value="yes">Acepto las condiciones del servicio</dgonmej-ui-checkbox>
+            </div>
+            <div class="actions">
+              <dgonmej-ui-button id="submit" variant="primary">Crear cuenta</dgonmej-ui-button>
+              <dgonmej-ui-button id="reset" variant="ghost">Vaciar formulario</dgonmej-ui-button>
+            </div>
+          </form>
+
+          <div class="stack">
+            <h3 class="panel-title phone-title">Navegación en el móvil</h3>
+            <div class="phone">
+              <div class="phone-frame">
+              <div class="screen">
+                <div class="status" aria-hidden="true"><span>9:41</span><span class="island"></span><span class="icons"><svg viewBox="0 0 24 24"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg><svg viewBox="0 0 24 24"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg><span class="battery"></span></span></div>
+                <div class="phone-scroll" id="phone-scroll">
+                  <dgonmej-ui-nav-bar heading="Ajustes" large scroll-target="#phone-scroll">
+                    <dgonmej-ui-button slot="trailing" variant="ghost">Editar</dgonmej-ui-button>
+                  </dgonmej-ui-nav-bar>
+                  <div class="phone-content">
+                    <div class="group-label">Conexiones</div>
+                    <dgonmej-ui-list id="phone-list-1"></dgonmej-ui-list>
+                    <div class="group-label">General</div>
+                    <dgonmej-ui-list id="phone-list-2"></dgonmej-ui-list>
+                    <div class="group-label">Privacidad</div>
+                    <dgonmej-ui-list id="phone-list-3"></dgonmej-ui-list>
+                  </div>
+                  <dgonmej-ui-tab-bar id="tabs" value="settings"></dgonmej-ui-tab-bar>
+                </div>
+                <span class="home-indicator" aria-hidden="true"></span>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="examples" style="margin-top: var(--ui-space-6)">
+          <div class="panel">
+            <h3 class="panel-title">Reproductor de MínimaFM</h3>
+            <dgonmej-ui-audio-player
+              live
+              heading="MínimaFM 97.9"
+              subheading="La voz del valle, tu voz"
+              src="https://stream-176.zeno.fm/fjmbxsddqv1uv"
+              artwork="https://dgonmej.github.io/minimafm/images/logos/logo-minimafm.png"
+            ></dgonmej-ui-audio-player>
+          </div>
+
+          <div class="panel" id="trayectoria">
+            <div class="profile">
+              <dgonmej-ui-avatar
+                size="xl"
+                ring
+                name="Diego González"
+                src="https://dgonmej.github.io/whoami/images/main_profile_mobile.jpg"
+              ></dgonmej-ui-avatar>
+              <div>
+                <h3>Diego González</h3>
+                <p>Desarrollador frontend en Tenerife</p>
+              </div>
+            </div>
+            <dgonmej-ui-timeline id="life" label="Trayectoria de Diego"></dgonmej-ui-timeline>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        dgonmej-ui, librería de componentes Lit. <a href="./playground.html">Prueba todas las opciones en el playground</a>.
+      </footer>
+    </main>
+
+    <!-- Capas compartidas por las vistas previas -->
+    <dgonmej-ui-dialog
+      id="dialog"
+      heading="¿Eliminar la factura #002?"
+      description="Se borrará de forma permanente y no podrás recuperarla."
+    >
+      <dgonmej-ui-button slot="actions" variant="secondary" data-close="cancel">Cancelar</dgonmej-ui-button>
+      <dgonmej-ui-button slot="actions" variant="danger" data-close="confirm">Eliminar</dgonmej-ui-button>
+    </dgonmej-ui-dialog>
+
+    <dgonmej-ui-sheet id="sheet" heading="Filtros" description="Elige qué facturas quieres ver." light-dismiss>
+      <div class="stack" style="gap: 0">
+        <dgonmej-ui-switch checked>Pagadas</dgonmej-ui-switch>
+        <dgonmej-ui-switch checked>Pendientes</dgonmej-ui-switch>
+        <dgonmej-ui-switch>Vencidas</dgonmej-ui-switch>
+      </div>
+      <dgonmej-ui-button slot="actions" variant="primary" data-close="apply">Aplicar filtros</dgonmej-ui-button>
+    </dgonmej-ui-sheet>
+
+    <dgonmej-ui-toast id="toast" placement="bottom"></dgonmej-ui-toast>
+
+    <script type="module" src="../src/index.js"></script>
+    <script type="module" src="./demo.js"></script>
+  </body>
+</html>
