@@ -1,78 +1,79 @@
 # dgonmej-ui
 
-Libreria de componentes basada en [Lit](https://lit.dev) (Web Components estandar).
-Se instala una vez y funciona igual en Angular, Astro, React, Vue o HTML plano,
-porque no depende de ningun framework: los componentes son elementos HTML nativos.
+Librería de componentes web inspirada en Apple, hecha con [Lit](https://lit.dev).
+Son elementos HTML nativos (Web Components), así que funcionan igual en Angular, Astro,
+React, Vue o HTML plano, sin envoltorios por framework.
 
-## Por que este enfoque
-
-- **Un solo codigo fuente** por componente. No hay version-Angular y version-Astro
-  del mismo boton.
-- **Estilos encapsulados** (Shadow DOM): los estilos de tu app nunca rompen la
-  libreria, y la libreria nunca rompe los estilos de tu app.
-- **Tokens de diseno compartidos** via CSS custom properties. Las variables
-  `--ui-*` atraviesan el Shadow DOM (es la unica cosa que lo hace), asi que
-  definiendolas una vez en tu app, todos los componentes las heredan.
-- **Prefijo propio** (`dgonmej-ui-`) en cada custom element, para evitar
-  colisiones de nombre si en el futuro usas otra libreria de Web Components
-  en el mismo proyecto.
-- **Cero acoplamiento a build tools de framework**: se compila una vez con Vite
-  y el resultado es un modulo ES estandar.
-
-## Estructura
-
-```
-src/
-  tokens/tokens.css        <- la "guia de estilos": colores, gradientes, materiales,
-                              espaciado, tipografia, radios, sombras y movimiento
-  shared/
-    styles.js              <- estilos comunes (tipografia base, material de vidrio, sr-only)
-    icons.js               <- set de iconos de linea usado por todos los componentes
-  components/<nombre>/dgonmej-ui-<nombre>.js
-  index.js                 <- registra todos los custom elements
-```
+- **26 componentes** de formularios, avisos, navegación, estructura y medios.
+- **Personalizable con tokens CSS** (`--ui-*`): color de acento, redondez, tipografía,
+  sombras y movimiento, sin tocar la librería.
+- **Modo claro y oscuro** según el sistema o forzado con `data-theme`.
+- **Accesibilidad de serie**: semántica nativa, teclado, foco visible, contraste AA y
+  respeto por `prefers-reduced-motion`.
+- **Formularios nativos**: los controles participan en `<form>` (`FormData`, `form.reset()`).
+- **Demo y playground** para ver cada componente y probar sus opciones en vivo.
 
 ## Componentes
 
 | Grupo | Componentes |
 |---|---|
-| Base | `icon`, `button` (primary, secondary, danger, ghost, glass), `badge`, `avatar` |
+| Base | `button`, `badge`, `avatar`, `icon` |
 | Formularios | `text-field`, `textarea`, `select`, `switch`, `checkbox`, `radio-group`, `segmented-control` |
 | Avisos y capas | `dialog`, `sheet`, `toast`, `progress`, `spinner`, `menu` |
-| Estructura y navegacion | `card`, `list`, `table`, `carousel`, `nav-bar`, `tab-bar`, `timeline` |
+| Estructura | `card`, `list`, `table`, `carousel`, `timeline` |
+| Navegación | `nav-bar`, `tab-bar` |
 | Medios y preferencias | `audio-player`, `theme-toggle` |
 
-Todos llevan el prefijo `dgonmej-ui-` (p. ej. `<dgonmej-ui-switch>`). La API de cada
-uno (propiedades, eventos `ui-*` y `::part()`) esta documentada en el comentario de su
-clase, y la demo (`npm run dev`, `/demo/`) muestra todas sus variantes.
+Cada etiqueta lleva el prefijo `dgonmej-ui-` (por ejemplo `<dgonmej-ui-switch>`). La API de
+cada componente (propiedades, eventos `ui-*` y partes `::part()`) está documentada en el
+comentario de su clase, en `src/components/<nombre>/`.
 
-Los iconos son de [Lucide](https://lucide.dev) (licencia ISC, ver `THIRD_PARTY_NOTICES.md`).
-
-En `/demo/playground.html` hay un playground para probar las opciones de cada
-componente en vivo (tamano, variante, lado, slots...), cambiar el acento y la redondez
-global (un solo control que mueve todos los tokens de radio), y copiar el HTML, JS y CSS
-resultantes.
-
-Los componentes de formulario participan en `<form>` como inputs nativos
-(`FormData`, `form.reset()`), gracias a `ElementInternals`.
-
-El tema oscuro se aplica solo segun el sistema, o se fuerza con
-`data-theme="dark"` / `data-theme="light"` en `<html>` (lo hace `dgonmej-ui-theme-toggle`).
-
-## Build y publicacion
+## Demo y playground
 
 ```bash
-npm run build        # genera dist/dgonmej-ui.js
-npm publish --access restricted   # o a un registro privado (Verdaccio, GitHub Packages, Artifactory)
+npm install
+npm run dev
 ```
 
-Si no quieres publicar a un registro todavia, puedes consumirla como dependencia
-de workspace (`"file:../dgonmej-ui"` en package.json) o como submodulo/paquete
-local mientras maduras la API.
+- **`/demo/`**: galería de todos los componentes con vista previa en vivo y ejemplos completos
+  (formulario, navegación móvil, reproductor y línea temporal).
+- **`/demo/playground.html`**: cambia las opciones de cada componente en vivo, prueba el color
+  de acento y la redondez global, y copia el HTML, JS y CSS resultantes.
+
+## Instalación
+
+Directamente desde GitHub (se compila al instalar):
+
+```bash
+npm install github:dgonmej/dgonmej-ui
+```
+
+Después, una sola vez en tu aplicación:
+
+```js
+import 'dgonmej-ui';             // registra todos los componentes
+import 'dgonmej-ui/tokens.css';  // tokens de diseño (colores, radios, tipografía...)
+```
+
+```html
+<dgonmej-ui-button variant="primary">Guardar cambios</dgonmej-ui-button>
+```
+
+Los datos complejos (arrays y objetos) se pasan como **propiedades JS**, no como atributos,
+porque los atributos HTML siempre son texto:
+
+```html
+<dgonmej-ui-list id="clientes"></dgonmej-ui-list>
+<script type="module">
+  document.getElementById('clientes').items = [
+    { id: 1, label: 'Cliente A', description: 'Activo' },
+  ];
+</script>
+```
 
 ## Uso en Astro
 
-Astro entiende Web Components de forma nativa, sin wrapper:
+Astro entiende los Web Components de forma nativa:
 
 ```astro
 ---
@@ -80,91 +81,91 @@ import 'dgonmej-ui';
 import 'dgonmej-ui/tokens.css';
 ---
 <dgonmej-ui-button variant="primary">Guardar</dgonmej-ui-button>
-
-<dgonmej-ui-list id="clientes"></dgonmej-ui-list>
-
-<script>
-  document.getElementById('clientes').items = [
-    { id: 1, label: 'Cliente A' },
-  ];
-</script>
 ```
-
-Los datos complejos (arrays, objetos) se pasan como **propiedades JS**, no como
-atributos HTML (los atributos son siempre string). Por eso `items`/`columns`/`rows`
-se asignan desde un `<script>`, o desde tu framework de turno via property binding.
 
 ## Uso en Angular
 
-1. Instala y registra el custom elements schema:
-
 ```ts
-// main.ts o el modulo raiz
+// main.ts
 import 'dgonmej-ui';
 ```
 
 ```ts
-// app.module.ts (o el standalone component)
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+// en el componente (standalone) o módulo que use las etiquetas
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
   standalone: true,
-  schema: [CUSTOM_ELEMENTS_SCHEMA], // le dice a Angular "esta etiqueta no es mia, no la valides"
-  ...
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], // Angular no valida etiquetas que no son suyas
+  // ...
 })
+export class ClientesComponent {}
 ```
 
-2. Importa los tokens una vez, globalmente (en `styles.css`):
-
 ```css
+/* styles.css */
 @import 'dgonmej-ui/tokens.css';
 ```
 
-3. Usa los componentes en el template. Angular hace property binding con `[prop]`
-   directamente sobre el custom element, que es exactamente lo que necesitan
-   `items`, `columns` y `rows`:
+Angular enlaza propiedades con `[prop]` y escucha eventos con `(evento)`. Los eventos son
+`CustomEvent`, así que los datos van en `$event.detail`:
 
 ```html
-<dgonmej-ui-button variant="primary" (ui-click)="guardar()">Guardar</dgonmej-ui-button>
-
 <dgonmej-ui-list [items]="clientes" (ui-select)="onSelect($event.detail)"></dgonmej-ui-list>
-
 <dgonmej-ui-table [columns]="columnas" [rows]="filas"></dgonmej-ui-table>
-
-<dgonmej-ui-carousel>
-  <img src="/a.jpg" />
-  <img src="/b.jpg" />
-</dgonmej-ui-carousel>
 ```
 
-Nota: Angular escucha eventos de custom elements con la sintaxis normal `(evento)`;
-como los eventos son `CustomEvent`, el payload va en `$event.detail`. Los nombres
-de evento (`ui-click`, `ui-select`, `ui-change`) no llevan el prefijo `dgonmej-`,
-solo las etiquetas de los elementos lo llevan.
+## Personalizar el tema
 
-## Personalizar el tema por proyecto
-
-Cada proyecto puede sobreescribir cualquier token sin tocar la libreria:
+Sobrescribe cualquier token en tu aplicación, sin tocar la librería:
 
 ```css
-/* styles.css del proyecto que consume la libreria */
 @import 'dgonmej-ui/tokens.css';
 
 :root {
-  --ui-color-primary: #16a34a;   /* tu marca */
-  --ui-radius-md: 4px;           /* tarjetas, campos y menus mas cuadrados */
-  --ui-radius-control: 6px;      /* botones, badges, switch... (999px = capsula) */
-  --ui-radius-scale: 0.5;        /* radios proporcionales (avatar redondeado) */
+  --ui-color-primary: #1a7030;          /* color de acento (texto y enlaces) */
+  --ui-gradient-primary: linear-gradient(180deg, #1d7a3a, #135c2a); /* rellenos */
+  --ui-radius-md: 6px;                  /* tarjetas, campos y menús */
+  --ui-radius-control: 999px;           /* botones, badges, switch... (999px = cápsula) */
+  --ui-radius-scale: 0.5;               /* radios proporcionales (avatar, spinner) */
 }
 ```
 
-## Anadir un componente nuevo
+El playground genera este bloque por ti al elegir acento y redondez. El tema oscuro se
+aplica según el sistema, o se fuerza con `data-theme="dark"` / `data-theme="light"` en
+`<html>`; `<dgonmej-ui-theme-toggle>` lo hace y lo recuerda entre visitas.
 
-1. Crear carpeta en `src/components/<nombre>/dgonmej-ui-<nombre>.js`.
-2. Usar `static properties` para la API publica y `static styles` con `var(--ui-*, fallback)`
-   para que respete los tokens.
-3. `customElements.define('dgonmej-ui-<nombre>', Clase)`.
-4. Exportarlo desde `src/index.js`.
+## Estructura
 
-No hace falta tocar Angular ni Astro: en cuanto se publica una nueva version del
-paquete, ambos proyectos lo reciben igual.
+```
+src/
+  tokens/tokens.css      tokens de diseño: color, gradientes, materiales, tipografía,
+                         espaciado, radios, sombras y movimiento
+  shared/styles.js       estilos comunes (tipografía base, material de vidrio)
+  shared/icons.js        iconos de Lucide usados por los componentes
+  components/<nombre>/   un componente por carpeta: dgonmej-ui-<nombre>.js
+  index.js               registra todos los componentes
+demo/                    portada, playground y mockup de teléfono
+```
+
+## Añadir un componente
+
+1. Crea `src/components/<nombre>/dgonmej-ui-<nombre>.js`.
+2. Define su API en `static properties` y sus estilos en `static styles`, usando siempre
+   `var(--ui-*, fallback)` para respetar los tokens.
+3. Regístralo con `customElements.define('dgonmej-ui-<nombre>', Clase)` y expórtalo en
+   `src/index.js`.
+4. Añádelo a la galería (`demo/demo.js`) y al playground (`demo/playground.js`).
+
+## Build
+
+```bash
+npm run build   # genera dist/dgonmej-ui.js
+```
+
+## Licencia
+
+[MIT](LICENSE) © Diego González.
+
+Los iconos son de [Lucide](https://lucide.dev) (licencia ISC); ver
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

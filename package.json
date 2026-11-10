@@ -1,6 +1,27 @@
 {
   "name": "dgonmej-ui",
   "version": "0.1.0",
+  "description": "Apple-inspired web components built with Lit. Framework-agnostic, themeable with design tokens, dark mode and accessibility built in.",
+  "license": "MIT",
+  "author": "Diego González",
+  "homepage": "https://github.com/dgonmej/dgonmej-ui#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dgonmej/dgonmej-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dgonmej/dgonmej-ui/issues"
+  },
+  "keywords": [
+    "web-components",
+    "lit",
+    "design-system",
+    "ui-components",
+    "design-tokens",
+    "custom-elements",
+    "dark-mode",
+    "accessibility"
+  ],
   "type": "module",
   "main": "dist/dgonmej-ui.js",
   "module": "dist/dgonmej-ui.js",
@@ -11,11 +32,13 @@
   "files": [
     "dist",
     "src/tokens",
-    "THIRD_PARTY_NOTICES.md"
+    "THIRD_PARTY_NOTICES.md",
+    "LICENSE"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "prepare": "vite build"
   },
   "dependencies": {
     "lit": "^3.2.0"
