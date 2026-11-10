@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { hostBase, material, srOnly } from '../../shared/styles.js';
 import { renderIcon } from '../../shared/icons.js';
+import { t } from '../../shared/i18n.js';
 
 /**
  * <dgonmej-ui-tab-bar value="home" fixed icon-only label="Principal"
@@ -118,7 +119,7 @@ export class DgonmejUiTabBar extends LitElement {
     super();
     this.value = '';
     this.items = [];
-    this.label = 'Navegación principal';
+    this.label = '';
     this.fixed = false;
     this.iconOnly = false;
   }
@@ -129,7 +130,7 @@ export class DgonmejUiTabBar extends LitElement {
       <nav
         class="material"
         part="bar"
-        aria-label=${this.label}
+        aria-label=${this.label || t(this, 'tabbar.label')}
         style="--_count: ${this.items.length || 1}; --_index: ${index}"
       >
         <span class="indicator" part="indicator"></span>

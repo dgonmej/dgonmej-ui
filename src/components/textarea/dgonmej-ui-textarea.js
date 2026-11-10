@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { hostBase } from '../../shared/styles.js';
 import { renderIcon } from '../../shared/icons.js';
+import { t } from '../../shared/i18n.js';
 
 let uid = 0;
 
@@ -196,7 +197,7 @@ export class DgonmejUiTextarea extends LitElement {
     return html`
       ${this.label
         ? html`<label for=${this._id}>
-            ${this.label}${this.required ? html` <span class="required">(obligatorio)</span>` : ''}
+            ${this.label}${this.required ? html` <span class="required">(${t(this, 'field.required')})</span>` : ''}
           </label>`
         : ''}
       <div class="field" part="field" style="--_rows: ${this.rows}; --_max-rows: ${this.maxRows}">

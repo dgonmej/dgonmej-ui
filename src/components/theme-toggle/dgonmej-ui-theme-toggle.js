@@ -3,10 +3,10 @@ import { hostBase } from '../../shared/styles.js';
 import '../segmented-control/dgonmej-ui-segmented-control.js';
 import '../button/dgonmej-ui-button.js';
 import { renderIcon } from '../../shared/icons.js';
+import { t } from '../../shared/i18n.js';
 
 const STORAGE_KEY = 'dgonmej-ui-theme';
 const THEMES = ['system', 'light', 'dark'];
-const LABELS = { system: 'Sistema', light: 'Claro', dark: 'Oscuro' };
 const ICONS = { system: 'circle-half', light: 'sun', dark: 'moon' };
 const instances = new Set();
 
@@ -80,7 +80,7 @@ export class DgonmejUiThemeToggle extends LitElement {
         <dgonmej-ui-button
           variant="glass"
           icon
-          label=${`Tema: ${LABELS[this.theme]}. Cambiar tema`}
+          label=${t(this, 'theme.change', { theme: t(this, `theme.${this.theme}`) })}
           @ui-click=${this._cycle}
         >
           ${renderIcon(ICONS[this.theme], { size: 20 })}
@@ -90,9 +90,9 @@ export class DgonmejUiThemeToggle extends LitElement {
     return html`
       <dgonmej-ui-segmented-control
         size="small"
-        label="Tema"
+        label=${t(this, 'theme.label')}
         .value=${this.theme}
-        .options=${THEMES.map((t) => ({ value: t, label: LABELS[t], icon: ICONS[t], hideLabel: this.compact }))}
+        .options=${THEMES.map((th) => ({ value: th, label: t(this, `theme.${th}`), icon: ICONS[th], hideLabel: this.compact }))}
         @ui-change=${this._onSegment}
       ></dgonmej-ui-segmented-control>
     `;

@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { hostBase } from '../../shared/styles.js';
+import { t } from '../../shared/i18n.js';
 
 // Pares de colores vecinos para el fondo de las iniciales (texto blanco con contraste AA)
 const GRADIENTS = [
@@ -19,8 +20,6 @@ const initials = (name = '') =>
     .slice(0, 2)
     .map((w) => w[0]?.toUpperCase() || '')
     .join('');
-
-const STATUS = { online: 'conectado', away: 'ausente', busy: 'ocupado' };
 
 const hash = (s = '') => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
 
@@ -149,18 +148,22 @@ export class DgonmejUiAvatar extends LitElement {
     if (changed.has('src')) this._failed = false;
   }
 
+  get _statusText() {
+    return ['online', 'away', 'busy'].includes(this.status) ? t(this, `avatar.${this.status}`) : '';
+  }
+
   render() {
     const [from, to] = GRADIENTS[hash(this.name) % GRADIENTS.length];
     const showImage = this.src && !this._failed;
     return html`
-      <div class="avatar" part="avatar" role="img" aria-label=${[this.name || 'Avatar', STATUS[this.status]].filter(Boolean).join(', ')}>
+      <div class="avatar" part="avatar" role="img" aria-label=${[this.name || t(this, 'avatar.label'), this._statusText].filter(Boolean).join(', ')}>
         <div class="inner" style="--_from: ${from}; --_to: ${to}">
           ${showImage
             ? html`<img src=${this.src} alt="" @error=${() => (this._failed = true)} />`
             : html`<span aria-hidden="true">${initials(this.name)}</span>`}
         </div>
       </div>
-      ${STATUS[this.status] ? html`<span class="status ${this.status}" aria-hidden="true"></span>` : ''}
+      ${this._statusText ? html`<span class="status ${this.status}" aria-hidden="true"></span>` : ''}
     `;
   }
 }

@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { repeat } from 'lit/directives/repeat.js';
 import { hostBase, material } from '../../shared/styles.js';
 import { renderIcon } from '../../shared/icons.js';
+import { t as translate } from '../../shared/i18n.js';
 
 const ICONS = { info: 'info', success: 'check-circle', warning: 'warning', danger: 'warning' };
 let uid = 0;
@@ -187,7 +188,7 @@ export class DgonmejUiToast extends LitElement {
           >
             ${renderIcon(ICONS[t.variant] || 'info', { size: 20 })}
             <span class="message">${t.message}</span>
-            <button class="close" type="button" aria-label="Cerrar aviso" @click=${() => this.dismiss(t.id)}>
+            <button class="close" type="button" aria-label=${translate(this, 'toast.close')} @click=${() => this.dismiss(t.id)}>
               ${renderIcon('xmark', { size: 14 })}
             </button>
           </div>

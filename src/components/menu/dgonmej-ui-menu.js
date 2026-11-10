@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { hostBase, material } from '../../shared/styles.js';
 import { renderIcon } from '../../shared/icons.js';
+import { t } from '../../shared/i18n.js';
 
 let uid = 0;
 
@@ -229,7 +230,7 @@ export class DgonmejUiMenu extends LitElement {
         part="menu"
         hidden
         role="menu"
-        aria-label=${this.label || 'Menú'}
+        aria-label=${this.label || t(this, 'menu.label')}
         @keydown=${this._onKeydown}
       >
         ${this.items.map((item) =>

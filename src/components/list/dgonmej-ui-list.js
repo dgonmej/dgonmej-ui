@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import { t } from '../../shared/i18n.js';
 
 /**
  * <dgonmej-ui-list .items=${[{ id, label, description? }]} variant="inset|plain" hide-chevron empty-text="...">
@@ -156,14 +157,14 @@ export class DgonmejUiList extends LitElement {
   constructor() {
     super();
     this.items = [];
-    this.emptyText = 'Todavía no hay elementos';
+    this.emptyText = '';
     this.variant = 'inset';
     this.hideChevron = false;
   }
 
   render() {
     if (!this.items.length) {
-      return html`<div class="empty" part="list">${this.emptyText}</div>`;
+      return html`<div class="empty" part="list">${this.emptyText || t(this, 'list.empty')}</div>`;
     }
     return html`
       <ul part="list">
