@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { hostBase } from '../../shared/styles.js';
 import { renderIcon } from '../../shared/icons.js';
+import { t } from '../../shared/i18n.js';
 
 const KIND_ICONS = {
   education: 'graduation',
@@ -347,7 +348,7 @@ export class DgonmejUiTimeline extends LitElement {
   constructor() {
     super();
     this.items = [];
-    this.label = 'Línea temporal';
+    this.label = '';
     this.layout = 'alternate';
     this.static = false;
   }
@@ -384,7 +385,7 @@ export class DgonmejUiTimeline extends LitElement {
   render() {
     let side = 0;
     return html`
-      <ol part="timeline" aria-label=${this.label}>
+      <ol part="timeline" aria-label=${this.label || t(this, 'timeline.label')}>
         ${this.items.map((item) => {
           const icon = KIND_ICONS[item.kind] || (item.milestone ? 'star' : 'calendar');
           if (item.milestone) {
@@ -408,7 +409,7 @@ export class DgonmejUiTimeline extends LitElement {
               <span class="marker" part="marker">${renderIcon(icon, { size: 18 })}</span>
               <article class="card" part="card">
                 <span class="period">
-                  ${item.period}${item.current ? html`<span class="now">Actualidad</span>` : ''}
+                  ${item.period}${item.current ? html`<span class="now">${t(this, 'timeline.current')}</span>` : ''}
                 </span>
                 <h3>${item.title}</h3>
                 ${item.description ? html`<p>${item.description}</p>` : ''}

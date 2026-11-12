@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { hostBase } from '../../shared/styles.js';
+import { t } from '../../shared/i18n.js';
 
 /**
  * <dgonmej-ui-progress value="40" max="100" label="Subiendo archivo" tone="accent|success|warning|danger"
@@ -131,7 +132,7 @@ export class DgonmejUiProgress extends LitElement {
         class="track ${indeterminate ? 'indeterminate' : ''}"
         part="track"
         role="progressbar"
-        aria-label=${this.label || 'Progreso'}
+        aria-label=${this.label || t(this, 'progress.label')}
         aria-valuemin="0"
         aria-valuemax="100"
         aria-valuenow=${ifDefined(indeterminate ? undefined : percent)}

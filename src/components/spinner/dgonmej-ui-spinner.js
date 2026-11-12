@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { hostBase } from '../../shared/styles.js';
+import { t } from '../../shared/i18n.js';
 
 // El angulo del degradado se anima como propiedad registrada: asi gira la estela
 // y el marco se queda quieto (un cuadrado girando se veria bambolear).
@@ -123,7 +124,7 @@ export class DgonmejUiSpinner extends LitElement {
     super();
     this.size = 'medium';
     this.tone = 'accent';
-    this.label = 'Cargando';
+    this.label = '';
   }
 
   connectedCallback() {
@@ -133,7 +134,7 @@ export class DgonmejUiSpinner extends LitElement {
 
   render() {
     return html`
-      <span role="status" aria-label=${this.label}>
+      <span role="status" aria-label=${this.label || t(this, 'spinner.label')}>
         <span class="track"></span>
         <span class="arc"></span>
       </span>

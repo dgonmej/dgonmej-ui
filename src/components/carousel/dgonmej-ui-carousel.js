@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import '../button/dgonmej-ui-button.js';
 import { renderIcon } from '../../shared/icons.js';
+import { t } from '../../shared/i18n.js';
 
 /**
  * <dgonmej-ui-carousel label="..." autoplay="5">
@@ -189,7 +190,7 @@ export class DgonmejUiCarousel extends LitElement {
   constructor() {
     super();
     this.index = 0;
-    this.label = 'Carrusel';
+    this.label = '';
     this._count = 0;
     this._pointerStartX = null;
     this.autoplay = 0;
@@ -243,8 +244,8 @@ export class DgonmejUiCarousel extends LitElement {
         class="viewport"
         part="viewport"
         role="region"
-        aria-roledescription="carrusel"
-        aria-label=${this.label}
+        aria-roledescription=${t(this, 'carousel.roledescription')}
+        aria-label=${this.label || t(this, 'carousel.label')}
         tabindex="0"
         @keydown=${this._onKeydown}
         @pointerdown=${this._onPointerDown}
@@ -261,13 +262,13 @@ export class DgonmejUiCarousel extends LitElement {
 
         ${this._count > 1
           ? html`
-              <dgonmej-ui-button class="nav prev" variant="glass" icon label="Anterior" @ui-click=${this._prev}>
+              <dgonmej-ui-button class="nav prev" variant="glass" icon label=${t(this, 'carousel.prev')} @ui-click=${this._prev}>
                 <svg viewBox="0 0 10 16" aria-hidden="true">
                   <path d="M8 2L2 8l6 6" fill="none" stroke="currentColor" stroke-width="2.2"
                     stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
               </dgonmej-ui-button>
-              <dgonmej-ui-button class="nav next" variant="glass" icon label="Siguiente" @ui-click=${this._next}>
+              <dgonmej-ui-button class="nav next" variant="glass" icon label=${t(this, 'carousel.next')} @ui-click=${this._next}>
                 <svg viewBox="0 0 10 16" aria-hidden="true">
                   <path d="M2 2l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2"
                     stroke-linecap="round" stroke-linejoin="round" />
@@ -278,7 +279,7 @@ export class DgonmejUiCarousel extends LitElement {
                   <button
                     class="dot"
                     type="button"
-                    aria-label="Ir a la diapositiva ${i + 1} de ${this._count}"
+                    aria-label=${t(this, 'carousel.goTo', { n: i + 1, total: this._count })}
                     aria-current=${i === this.index ? 'true' : 'false'}
                     @click=${() => this._goTo(i)}
                   ></button>
@@ -287,7 +288,7 @@ export class DgonmejUiCarousel extends LitElement {
                   ? html`<button
                       class="pause"
                       type="button"
-                      aria-label=${this._userPaused ? 'Reanudar carrusel' : 'Pausar carrusel'}
+                      aria-label=${t(this, this._userPaused ? 'carousel.resume' : 'carousel.pause')}
                       @click=${() => (this._userPaused = !this._userPaused)}
                     >
                       ${renderIcon(this._userPaused ? 'play' : 'pause', { size: 12 })}

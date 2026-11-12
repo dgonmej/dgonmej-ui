@@ -40,12 +40,16 @@ export class DgonmejUiNavBar extends LitElement {
       .bar {
         --_inset: max(var(--ui-space-2, 8px), (100% - var(--ui-nav-bar-max-width, 100%)) / 2);
         display: grid;
-        grid-template-columns: 1fr auto 1fr;
+        /* Cada lado toma al menos lo que necesita su contenido; el titulo queda centrado si cabe */
+        grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr);
         align-items: center;
         gap: var(--ui-space-2, 8px);
         min-height: var(--ui-control-height, 44px);
         /* Aire vertical: el resaltado de los botones no llega al borde de la ventana */
         padding: calc(env(safe-area-inset-top) + 6px) var(--_inset) 6px;
+        /* En horizontal, la isla dinamica ocupa un lateral: no meter controles debajo */
+        padding-left: max(var(--_inset), calc(env(safe-area-inset-left) + var(--ui-space-2, 8px)));
+        padding-right: max(var(--_inset), calc(env(safe-area-inset-right) + var(--ui-space-2, 8px)));
         border-width: 0 0 1px;
         transition:
           background-color var(--_base) var(--_ease),
@@ -67,12 +71,15 @@ export class DgonmejUiNavBar extends LitElement {
       .leading {
         justify-self: start;
         display: flex;
+        /* Controles de distinta altura quedan centrados entre si */
+        align-items: center;
         gap: var(--ui-space-1, 4px);
       }
 
       .trailing {
         justify-self: end;
         display: flex;
+        align-items: center;
         gap: var(--ui-space-1, 4px);
       }
 
@@ -94,6 +101,7 @@ export class DgonmejUiNavBar extends LitElement {
       .large-title {
         margin: 0;
         padding: var(--ui-space-1, 4px) max(var(--ui-space-4, 16px), (100% - var(--ui-nav-bar-max-width, 100%)) / 2 + var(--ui-space-1, 4px)) var(--ui-space-2, 8px);
+        padding-left: max(var(--ui-space-4, 16px), (100% - var(--ui-nav-bar-max-width, 100%)) / 2 + var(--ui-space-1, 4px), calc(env(safe-area-inset-left) + var(--ui-space-4, 16px)));
         color: var(--ui-color-text, #1d1d1f);
         font-family: var(--ui-font-family-display, -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif);
         font-size: var(--ui-font-size-large-title, 2.125rem);

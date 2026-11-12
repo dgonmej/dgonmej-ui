@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import { t } from '../../shared/i18n.js';
 
 /**
  * <dgonmej-ui-table .columns=${[{ key, header, align? }]} .rows=${[{...}]} label="..." empty-text="...">
@@ -111,15 +112,15 @@ export class DgonmejUiTable extends LitElement {
     super();
     this.columns = [];
     this.rows = [];
-    this.emptyText = 'Todavía no hay datos';
-    this.label = 'Tabla';
+    this.emptyText = '';
+    this.label = '';
     this.density = 'regular';
     this.striped = false;
   }
 
   render() {
     return html`
-      <div class="container" part="container" tabindex="0" role="region" aria-label=${this.label}>
+      <div class="container" part="container" tabindex="0" role="region" aria-label=${this.label || t(this, 'table.label')}>
         <table part="table">
           <thead>
             <tr>
@@ -135,7 +136,7 @@ export class DgonmejUiTable extends LitElement {
                     </tr>
                   `
                 )
-              : html`<tr><td class="empty" colspan=${this.columns.length || 1}>${this.emptyText}</td></tr>`}
+              : html`<tr><td class="empty" colspan=${this.columns.length || 1}>${this.emptyText || t(this, 'table.empty')}</td></tr>`}
           </tbody>
         </table>
       </div>

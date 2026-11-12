@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { hostBase, srOnly } from '../../shared/styles.js';
 import { renderIcon } from '../../shared/icons.js';
+import { t } from '../../shared/i18n.js';
 
 /**
  * <dgonmej-ui-segmented-control label="Vista" value="week"
@@ -143,7 +144,7 @@ export class DgonmejUiSegmentedControl extends LitElement {
         class="control"
         part="control"
         role="radiogroup"
-        aria-label=${this.label || 'Opciones'}
+        aria-label=${this.label || t(this, 'segmented.label')}
         style="--_count: ${this.options.length || 1}; --_index: ${index}"
         @keydown=${this._onKeydown}
       >

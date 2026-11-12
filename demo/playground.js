@@ -152,9 +152,9 @@ const components = [
     tag: 'dgonmej-ui-avatar',
     controls: [
       seg('size', 'Tamaño', ['sm', 'md', 'lg', 'xl'].map((v) => opt(v)), 'xl'),
-      seg('shape', 'Forma', [opt('circle', 'Círculo'), opt('rounded', 'Redondeada')], 'circle'),
+      seg('shape', 'Forma', [opt('circle', 'Círculo'), opt('rounded', 'Redondeada'), opt('blob', 'Gota')], 'circle'),
       select('status', 'Estado', [opt('', 'Ninguno'), opt('online', 'Conectado'), opt('away', 'Ausente'), opt('busy', 'Ocupado')], 'online'),
-      bool('ring', 'Aro de acento', true),
+      bool('ring', 'Aro de acento (con la gota, gira)', true),
       bool('photo', 'Con foto', true, { rebuild: true, attr: false }),
       text('name', 'Nombre', 'Diego González'),
     ],

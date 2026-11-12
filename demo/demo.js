@@ -26,8 +26,8 @@ const CATALOG = [
       {
         id: 'avatar',
         name: 'Avatar',
-        desc: 'Foto o iniciales sobre gradiente, estado y aro de acento.',
-        preview: `<dgonmej-ui-avatar size="lg" ring name="Diego González" src="https://dgonmej.github.io/whoami/images/main_profile_mobile.jpg"></dgonmej-ui-avatar><dgonmej-ui-avatar size="lg" name="Ana Pérez" status="online"></dgonmej-ui-avatar><dgonmej-ui-avatar size="lg" shape="rounded" name="Luis Martín"></dgonmej-ui-avatar>`,
+        desc: 'Foto o iniciales sobre gradiente, estado, aro de acento y forma de gota animada.',
+        preview: `<dgonmej-ui-avatar size="lg" ring name="Diego González" src="https://dgonmej.github.io/whoami/images/main_profile_mobile.jpg"></dgonmej-ui-avatar><dgonmej-ui-avatar size="lg" name="Ana Pérez" status="online"></dgonmej-ui-avatar><dgonmej-ui-avatar size="lg" shape="rounded" name="Luis Martín"></dgonmej-ui-avatar><dgonmej-ui-avatar size="lg" shape="blob" ring name="Marta Ruiz"></dgonmej-ui-avatar>`,
       },
       {
         id: 'icon',

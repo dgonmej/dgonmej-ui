@@ -39,6 +39,11 @@
   /* Gradientes (colores vecinos, con texto blanco AA encima) */
   --ui-gradient-primary: linear-gradient(180deg, #0071e3 0%, #005bbf 100%);
   --ui-gradient-danger: linear-gradient(180deg, #d92d24 0%, #b8131a 100%);
+
+  /* Aro animado del avatar (shape="blob" con ring): tres colores vecinos del acento */
+  --ui-color-ring-1: #0071e3;
+  --ui-color-ring-2: #32ade6;
+  --ui-color-ring-3: #5e5ce6;
   --ui-gradient-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.22) 0%, rgb(255 255 255 / 0) 55%);
   --ui-gradient-ambient:
     radial-gradient(60% 50% at 10% 0%, rgb(0 122 255 / 0.14), transparent 70%),
@@ -98,6 +103,8 @@
   --ui-duration-fast: 160ms;
   --ui-duration-base: 260ms;
   --ui-duration-slow: 400ms;
+  /* Bucles ambientales lentos (p. ej. la gota del avatar) */
+  --ui-duration-ambient: 4s;
 }
 
 /*
@@ -130,6 +137,9 @@
   --ui-color-text-muted: #98989d;
   --ui-color-focus: #409cff;
   --ui-gradient-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.14) 0%, rgb(255 255 255 / 0) 55%);
+  --ui-color-ring-1: #0a84ff;
+  --ui-color-ring-2: #64d2ff;
+  --ui-color-ring-3: #7d7aff;
   --ui-gradient-ambient:
     radial-gradient(60% 50% at 10% 0%, rgb(10 132 255 / 0.22), transparent 70%),
     radial-gradient(50% 45% at 95% 10%, rgb(100 210 255 / 0.14), transparent 70%),
@@ -171,6 +181,9 @@
     --ui-color-text-muted: #98989d;
     --ui-color-focus: #409cff;
     --ui-gradient-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.14) 0%, rgb(255 255 255 / 0) 55%);
+    --ui-color-ring-1: #0a84ff;
+    --ui-color-ring-2: #64d2ff;
+    --ui-color-ring-3: #7d7aff;
     --ui-gradient-ambient:
       radial-gradient(60% 50% at 10% 0%, rgb(10 132 255 / 0.22), transparent 70%),
       radial-gradient(50% 45% at 95% 10%, rgb(100 210 255 / 0.14), transparent 70%),

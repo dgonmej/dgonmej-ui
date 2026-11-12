@@ -3,6 +3,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { hostBase } from '../../shared/styles.js';
 import { renderIcon } from '../../shared/icons.js';
 import '../spinner/dgonmej-ui-spinner.js';
+import { t } from '../../shared/i18n.js';
 
 const fmt = (s) => {
   if (!Number.isFinite(s)) return '0:00';
@@ -407,7 +408,7 @@ export class DgonmejUiAudioPlayer extends LitElement {
             ${this.artwork ? html`<img src=${this.artwork} alt="" />` : renderIcon(this.live ? 'radio' : 'music', { size: 36 })}
           </div>
           <div class="info">
-            ${this.live ? html`<div class="live">En directo</div>` : ''}
+            ${this.live ? html`<div class="live">${t(this, 'player.live')}</div>` : ''}
             <h3>${this.heading}</h3>
             ${this.subheading ? html`<p class="sub">${this.subheading}</p>` : ''}
           </div>
@@ -416,12 +417,12 @@ export class DgonmejUiAudioPlayer extends LitElement {
               class="play"
               part="play"
               type="button"
-              aria-label=${playing || loading ? 'Pausar' : 'Reproducir'}
+              aria-label=${t(this, playing || loading ? 'player.pause' : 'player.play')}
               ?disabled=${!this.src}
               @click=${this.toggle}
             >
               ${loading
-                ? html`<dgonmej-ui-spinner tone="current" label="Conectando"></dgonmej-ui-spinner>`
+                ? html`<dgonmej-ui-spinner tone="current" label=${t(this, 'player.connecting')}></dgonmej-ui-spinner>`
                 : html`<span class="icon" data-name=${playing ? 'pause' : 'play'}>${renderIcon(playing ? 'pause' : 'play', { size: 24 })}</span>`}
             </button>
             ${this.live
@@ -434,8 +435,8 @@ export class DgonmejUiAudioPlayer extends LitElement {
                     step="1"
                     .value=${String(this._time)}
                     style="--_pct: ${posPct}"
-                    aria-label="Posición"
-                    aria-valuetext=${`${fmt(this._time)} de ${fmt(this._duration)}`}
+                    aria-label=${t(this, 'player.position')}
+                    aria-valuetext=${t(this, 'player.positionText', { time: fmt(this._time), total: fmt(this._duration) })}
                     @input=${this._seek}
                   />
                   <div class="times"><span>${fmt(this._time)}</span><span>${fmt(this._duration)}</span></div>
@@ -444,7 +445,7 @@ export class DgonmejUiAudioPlayer extends LitElement {
               <button
                 class="icon-button"
                 type="button"
-                aria-label=${this._muted ? 'Activar sonido' : 'Silenciar'}
+                aria-label=${t(this, this._muted ? 'player.unmute' : 'player.mute')}
                 @click=${this._toggleMute}
               >
                 ${renderIcon(this._muted || this._volume === 0 ? 'speaker-off' : 'speaker', { size: 20 })}
@@ -456,13 +457,13 @@ export class DgonmejUiAudioPlayer extends LitElement {
                 step="0.01"
                 .value=${String(this._muted ? 0 : this._volume)}
                 style="--_pct: ${volumePct}"
-                aria-label="Volumen"
+                aria-label=${t(this, 'player.volume')}
                 @input=${this._setVolume}
               />
             </div>
           </div>
           ${this._state === 'error'
-            ? html`<p class="error" role="alert">No se ha podido reproducir. Comprueba tu conexión e inténtalo de nuevo.</p>`
+            ? html`<p class="error" role="alert">${t(this, 'player.error')}</p>`
             : ''}
         </div>
         <audio

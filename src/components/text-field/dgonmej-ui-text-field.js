@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { hostBase } from '../../shared/styles.js';
 import { renderIcon } from '../../shared/icons.js';
+import { t } from '../../shared/i18n.js';
 
 let uid = 0;
 
@@ -335,7 +336,7 @@ export class DgonmejUiTextField extends LitElement {
       return html`<button
         class="type-icon"
         type="button"
-        aria-label=${this._reveal ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+        aria-label=${t(this, this._reveal ? 'field.hidePassword' : 'field.showPassword')}
         aria-pressed=${this._reveal ? 'true' : 'false'}
         @click=${() => (this._reveal = !this._reveal)}
       >
@@ -349,7 +350,7 @@ export class DgonmejUiTextField extends LitElement {
         class="type-icon"
         type="button"
         tabindex="-1"
-        aria-label=${this.type === 'time' ? 'Elegir hora' : 'Abrir calendario'}
+        aria-label=${t(this, this.type === 'time' ? 'field.chooseTime' : 'field.openCalendar')}
         ?disabled=${this.disabled}
         @click=${this._openPicker}
       >
@@ -381,7 +382,7 @@ export class DgonmejUiTextField extends LitElement {
     return html`
       ${this.label
         ? html`<label for=${this._id}>
-            ${this.label}${this.required ? html` <span class="required">(obligatorio)</span>` : ''}
+            ${this.label}${this.required ? html` <span class="required">(${t(this, 'field.required')})</span>` : ''}
           </label>`
         : ''}
       <div class="field" part="field">
@@ -408,7 +409,7 @@ export class DgonmejUiTextField extends LitElement {
         ${showClear || typeIcon
           ? html`<span class="trailing">
               ${showClear
-                ? html`<button class="clear" type="button" aria-label="Borrar" @click=${this._clear}>
+                ? html`<button class="clear" type="button" aria-label=${t(this, 'field.clear')} @click=${this._clear}>
                     ${renderIcon('xmark', { size: 16 })}
                   </button>`
                 : ''}
