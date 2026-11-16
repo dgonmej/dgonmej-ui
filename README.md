@@ -42,7 +42,21 @@ npm run dev
 
 ## Instalación
 
-Directamente desde GitHub (se compila al instalar):
+Desde npm:
+
+```bash
+npm install dgonmej-ui
+```
+
+Lit se instala como dependencia y no va dentro del paquete, así que si tu aplicación también usa
+Lit se comparte la misma copia. La librería se distribuye como módulo ES con `import 'lit'`, por lo
+que necesita un empaquetador (Vite, Astro, webpack...) o una CDN que resuelva las dependencias:
+
+```html
+<script type="module" src="https://cdn.jsdelivr.net/npm/dgonmej-ui/+esm"></script>
+```
+
+También se puede instalar directamente desde GitHub (se compila al instalar):
 
 ```bash
 npm install github:dgonmej/dgonmej-ui

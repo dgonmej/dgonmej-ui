@@ -8,5 +8,10 @@ export default defineConfig({
       formats: ['es'],
       fileName: () => 'dgonmej-ui.js',
     },
+    rollupOptions: {
+      // Lit no se empaqueta: es una dependencia y la resuelve quien instala la libreria,
+      // asi una web que tambien use Lit no lo carga dos veces.
+      external: [/^lit(\/|$)/, /^@lit\//],
+    },
   },
 });

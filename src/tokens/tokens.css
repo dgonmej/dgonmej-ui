@@ -40,8 +40,9 @@
   --ui-gradient-primary: linear-gradient(180deg, #0071e3 0%, #005bbf 100%);
   --ui-gradient-danger: linear-gradient(180deg, #d92d24 0%, #b8131a 100%);
 
-  /* Aro animado del avatar (shape="blob" con ring): tres colores vecinos del acento */
-  --ui-color-ring-1: #0071e3;
+  /* Aro animado del avatar (shape="blob" con ring): tres colores vecinos del acento.
+     Estos valores son el respaldo; donde hay color relativo salen de --ui-color-primary (ver al final). */
+  --ui-color-ring-1: #0066cc;
   --ui-color-ring-2: #32ade6;
   --ui-color-ring-3: #5e5ce6;
   --ui-gradient-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.22) 0%, rgb(255 255 255 / 0) 55%);
@@ -137,9 +138,6 @@
   --ui-color-text-muted: #98989d;
   --ui-color-focus: #409cff;
   --ui-gradient-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.14) 0%, rgb(255 255 255 / 0) 55%);
-  --ui-color-ring-1: #0a84ff;
-  --ui-color-ring-2: #64d2ff;
-  --ui-color-ring-3: #7d7aff;
   --ui-gradient-ambient:
     radial-gradient(60% 50% at 10% 0%, rgb(10 132 255 / 0.22), transparent 70%),
     radial-gradient(50% 45% at 95% 10%, rgb(100 210 255 / 0.14), transparent 70%),
@@ -181,9 +179,6 @@
     --ui-color-text-muted: #98989d;
     --ui-color-focus: #409cff;
     --ui-gradient-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.14) 0%, rgb(255 255 255 / 0) 55%);
-    --ui-color-ring-1: #0a84ff;
-    --ui-color-ring-2: #64d2ff;
-    --ui-color-ring-3: #7d7aff;
     --ui-gradient-ambient:
       radial-gradient(60% 50% at 10% 0%, rgb(10 132 255 / 0.22), transparent 70%),
       radial-gradient(50% 45% at 95% 10%, rgb(100 210 255 / 0.14), transparent 70%),
@@ -195,5 +190,33 @@
     --ui-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
     --ui-shadow-md: 0 1px 3px rgb(0 0 0 / 0.4), 0 8px 24px -8px rgb(0 0 0 / 0.6);
     --ui-shadow-lg: 0 2px 6px rgb(0 0 0 / 0.4), 0 24px 48px -16px rgb(0 0 0 / 0.7);
+  }
+}
+
+/*
+ * Colores derivados del acento: si cambia --ui-color-primary (o el tema), el tinte, el brillo
+ * y el aro del avatar le siguen. Los valores fijos de arriba quedan como respaldo.
+ * Se declaran tambien en [data-theme] para que se recalculen con el acento de ese tema.
+ */
+@supports (color: oklch(from red l c h)) {
+  :root,
+  [data-theme] {
+    --ui-color-primary-tint: rgb(from var(--ui-color-primary) r g b / 0.12);
+    --ui-color-primary-glow: rgb(from var(--ui-color-primary) r g b / 0.4);
+    --ui-color-ring-1: var(--ui-color-primary);
+    --ui-color-ring-2: oklch(from var(--ui-color-primary) min(calc(l + 0.15), 0.9) calc(c * 0.8) calc(h - 20));
+    --ui-color-ring-3: oklch(from var(--ui-color-primary) min(calc(l + 0.03), 0.9) calc(c * 1.1) calc(h + 25));
+  }
+
+  [data-theme="dark"] {
+    --ui-color-primary-tint: rgb(from var(--ui-color-primary) r g b / 0.18);
+    --ui-color-primary-glow: rgb(from var(--ui-color-primary) r g b / 0.45);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ui-color-primary-tint: rgb(from var(--ui-color-primary) r g b / 0.18);
+      --ui-color-primary-glow: rgb(from var(--ui-color-primary) r g b / 0.45);
+    }
   }
 }
