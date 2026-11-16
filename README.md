@@ -177,6 +177,15 @@ demo/                    portada, playground y mockup de teléfono
 npm run build   # genera dist/dgonmej-ui.js
 ```
 
+## Seguridad
+
+- Los textos (nombres, títulos, descripciones...) se escapan siempre: no se interpretan como HTML.
+- Los atributos con URL (`href` en botón, tarjeta y enlaces de la línea de tiempo, `src` en avatar
+  y reproductor, `artwork`) se usan tal cual, igual que en un `<a>` o un `<img>` nativos. Si el valor
+  viene de un usuario, valídalo antes en tu aplicación y admite solo `https:` (o `http:` y `mailto:`
+  si hace falta): una URL `javascript:` se ejecutaría al pulsar el enlace.
+- Los enlaces con `target="_blank"` llevan `rel="noopener noreferrer"`.
+
 ## Licencia
 
 [MIT](LICENSE) © Diego González.
