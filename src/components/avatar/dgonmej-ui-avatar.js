@@ -39,7 +39,7 @@ if (typeof CSS !== 'undefined' && CSS.registerProperty) {
  * Si no hay imagen (o falla), muestra las iniciales sobre un gradiente que depende del nombre.
  * `ring`: aro con el gradiente del acento. `status`: punto de estado (se anuncia junto al nombre).
  * `shape="blob"`: forma de gota de agua que cambia sin moverse de sitio y flota suavemente; con
- *   `ring`, el aro es un degradado que gira (colores --ui-color-ring-1/2/3). Con «reducir
+ *   `ring`, el aro es un degradado que gira (colores --ui-color-ring-1/2/3, derivados del acento). Con «reducir
  *   movimiento» se queda redonda y quieta.
  * `--ui-avatar-size`: tamaño libre (p. ej. 128px), por encima de `size`.
  * Parts: 'avatar', 'image' (p. ej. ::part(image) { object-position: 50% 20% } para encuadrar la foto)
@@ -179,10 +179,10 @@ export class DgonmejUiAvatar extends LitElement {
         border-radius: inherit;
         background: conic-gradient(
           from var(--ui-avatar-angle, 200deg),
-          var(--ui-color-ring-1, #0071e3),
+          var(--ui-color-ring-1, #0066cc),
           var(--ui-color-ring-2, #32ade6),
           var(--ui-color-ring-3, #5e5ce6),
-          var(--ui-color-ring-1, #0071e3)
+          var(--ui-color-ring-1, #0066cc)
         );
       }
 
