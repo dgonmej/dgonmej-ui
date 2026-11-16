@@ -53,7 +53,8 @@ Lit se comparte la misma copia. La librería se distribuye como módulo ES con `
 que necesita un empaquetador (Vite, Astro, webpack...) o una CDN que resuelva las dependencias:
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/dgonmej-ui/+esm"></script>
+<link rel="stylesheet" href="https://esm.sh/dgonmej-ui@0.1/tokens.css" />
+<script type="module" src="https://esm.sh/dgonmej-ui@0.1"></script>
 ```
 
 También se puede instalar directamente desde GitHub (se compila al instalar):
