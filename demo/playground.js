@@ -1,5 +1,8 @@
 import { iconNames } from '../src/components/icon/dgonmej-ui-icon.js';
 
+// Foto de ejemplo incluida en la demo (Vite la copia y le pone huella al compilar)
+const PROFILE_PHOTO = new URL('./profile.jpg', import.meta.url).href;
+
 /*
  * Playground: cada componente declara sus controles y como se pinta.
  * - Los controles normales se aplican en vivo como atributo del componente (se ven sus transiciones).
@@ -161,7 +164,7 @@ const components = [
     defaults: { size: 'md', status: '', ring: false },
     markup: (s, a) =>
       `<dgonmej-ui-avatar${a('name', 'size', 'shape', 'status', 'ring')}${
-        s.photo ? '\n  src="https://dgonmej.github.io/whoami/images/main_profile_mobile.jpg"' : ''
+        s.photo ? `\n  src="${PROFILE_PHOTO}"` : ''
       }></dgonmej-ui-avatar>`,
   },
   {
