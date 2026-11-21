@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, nothing } from 'lit';
 import { hostBase, material } from '../../shared/styles.js';
 import { renderIcon } from '../../shared/icons.js';
 import { t } from '../../shared/i18n.js';
@@ -11,6 +11,9 @@ let uid = 0;
  *   <dgonmej-ui-button slot="trigger" variant="secondary" icon label="Mas opciones">...</dgonmej-ui-button>
  * </dgonmej-ui-menu>
  * Menu contextual de vidrio anclado al disparador. Teclado: flechas, Inicio/Fin, Esc.
+ * Se pinta en la capa superior del navegador (Popover API), asi que ningun contenedor con
+ * overflow: hidden ni ningun contexto de apilamiento lo recorta. Si no cabe por abajo, se abre
+ * por arriba (y al reves), y nunca se sale de la pantalla por los lados.
  * placement: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'
  * Evento: 'ui-select' con detail = { value }
  * Parts: 'menu', 'item'
@@ -53,6 +56,16 @@ export class DgonmejUiMenu extends LitElement {
       /* Cerrado del todo: fuera del layout, asi no provoca scroll aunque este junto al borde */
       .menu[hidden] {
         display: none;
+      }
+
+      /* Con Popover API: capa superior y posicion fija calculada al abrir (top/left en linea) */
+      .menu[popover] {
+        position: fixed;
+        inset: auto;
+        margin: 0;
+        border: 0;
+        overflow: visible;
+        color: inherit;
       }
 
       /* Si no cabe por su lado, se alinea por el contrario */
@@ -173,6 +186,8 @@ export class DgonmejUiMenu extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener('pointerdown', this._onDocPointer, true);
+    window.removeEventListener('scroll', this._reposition, { capture: true });
+    window.removeEventListener('resize', this._reposition);
   }
 
   get _trigger() {
@@ -181,6 +196,15 @@ export class DgonmejUiMenu extends LitElement {
 
   get _menuItems() {
     return [...this.renderRoot.querySelectorAll('[role="menuitem"]:not(:disabled)')];
+  }
+
+  get _popover() {
+    return typeof HTMLElement !== 'undefined' && 'showPopover' in HTMLElement.prototype;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._reposition = () => this.open && this._place(this.renderRoot.querySelector('.menu'));
   }
 
   updated(changed) {
@@ -199,19 +223,58 @@ export class DgonmejUiMenu extends LitElement {
       const menu = this.renderRoot.querySelector('.menu');
       clearTimeout(this._hideTimer);
       if (this.open) {
-        menu.hidden = false;
-        this._fitInViewport(menu);
+        if (this._popover) {
+          if (!menu.matches(':popover-open')) menu.showPopover();
+          this._place(menu);
+          window.addEventListener('scroll', this._reposition, { capture: true, passive: true });
+          window.addEventListener('resize', this._reposition, { passive: true });
+        } else {
+          menu.hidden = false;
+          this._fitInViewport(menu);
+        }
         document.addEventListener('pointerdown', this._onDocPointer, true);
         this._focusItem(0);
       } else {
         document.removeEventListener('pointerdown', this._onDocPointer, true);
+        window.removeEventListener('scroll', this._reposition, { capture: true });
+        window.removeEventListener('resize', this._reposition);
         // Se retira del layout cuando termina la animacion de cierre
         const duration = parseFloat(getComputedStyle(menu).transitionDuration.split(',').pop()) * 1000 || 0;
         this._hideTimer = setTimeout(() => {
-          if (!this.open) menu.hidden = true;
+          if (this.open) return;
+          if (this._popover) {
+            if (menu.matches(':popover-open')) menu.hidePopover();
+          } else menu.hidden = true;
         }, duration);
       }
     }
+  }
+
+  /** Coloca el menu (posicion fija) junto al disparador, dentro de la pantalla. */
+  _place(menu) {
+    const anchor = (this._trigger || this).getBoundingClientRect();
+    const w = menu.offsetWidth;
+    const h = menu.offsetHeight;
+    const gap = 6;
+    const margin = 8;
+    const vw = document.documentElement.clientWidth;
+    const vh = window.innerHeight;
+    const [side, align] = (this.placement || 'bottom-start').split('-');
+    const below = anchor.bottom + gap;
+    const above = anchor.top - gap - h;
+    let top = side === 'top' ? above : below;
+    // Si no cabe por el lado pedido y por el otro si, se da la vuelta
+    if (side !== 'top' && below + h > vh - margin && above >= margin) top = above;
+    if (side === 'top' && above < margin && below + h <= vh - margin) top = below;
+    let left = align === 'end' ? anchor.right - w : anchor.left;
+    left = Math.min(Math.max(left, margin), vw - margin - w);
+    const abre = top < anchor.top ? 'bottom' : 'top';
+    // right/bottom en auto: las reglas de placement (absolutas) no deben estirarlo
+    menu.style.right = 'auto';
+    menu.style.bottom = 'auto';
+    menu.style.top = `${Math.round(top)}px`;
+    menu.style.left = `${Math.round(left)}px`;
+    menu.style.transformOrigin = `${abre} ${align === 'end' ? 'right' : 'left'}`;
   }
 
   _fitInViewport(menu) {
@@ -228,7 +291,8 @@ export class DgonmejUiMenu extends LitElement {
         id=${this._id}
         class="menu material"
         part="menu"
-        hidden
+        popover=${this._popover ? 'manual' : nothing}
+        ?hidden=${!this._popover}
         role="menu"
         aria-label=${this.label || t(this, 'menu.label')}
         @keydown=${this._onKeydown}
