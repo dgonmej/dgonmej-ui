@@ -1,0 +1,90 @@
+/* Pie compartido (mismo diseño que whoami y links). --pie-max: ancho del contenido de la pagina */
+.pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-2, 8px) var(--ui-space-6, 24px);
+  max-width: var(--pie-max, 1120px);
+  margin: 0 auto;
+  /* Margen inferior: el boton de volver arriba (44px) no tapa el texto al final de la pagina */
+  padding:
+    var(--ui-space-6, 24px)
+    calc(var(--ui-space-4, 16px) + env(safe-area-inset-right))
+    calc(44px + var(--ui-space-8, 32px) + env(safe-area-inset-bottom))
+    calc(var(--ui-space-4, 16px) + env(safe-area-inset-left));
+  border-top: 1px solid var(--ui-color-separator, rgb(60 60 67 / 0.14));
+  color: var(--ui-color-text-muted, #6e6e73);
+  font-size: var(--ui-font-size-footnote, 0.8125rem);
+}
+
+.pie p {
+  margin: 0;
+}
+
+.pie-hecho {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--ui-color-text, #1d1d1f);
+  font-size: var(--ui-font-size-subhead, 0.9375rem);
+}
+
+.pie-hecho strong {
+  color: var(--ui-color-primary-text, #0066cc);
+}
+
+/* Corazon relleno con el acento */
+.pie-corazon {
+  display: inline-flex;
+  color: var(--ui-color-primary-text, #0066cc);
+}
+
+.pie-corazon svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.pie-version {
+  padding: 2px 10px;
+  border-radius: var(--ui-radius-control, 999px);
+  color: var(--ui-color-primary-text, #0066cc);
+  background: var(--ui-color-primary-tint, rgb(0 113 227 / 0.12));
+  font-size: var(--ui-font-size-caption, 0.75rem);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 559px) {
+  .pie {
+    flex-direction: column;
+  }
+}
+
+.pie-arriba {
+  position: fixed;
+  z-index: 20;
+  right: calc(var(--ui-space-4, 16px) + env(safe-area-inset-right));
+  bottom: calc(var(--ui-space-4, 16px) + env(safe-area-inset-bottom));
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  pointer-events: none;
+  transition:
+    opacity var(--ui-duration-base, 260ms) var(--ui-ease-standard, cubic-bezier(0.32, 0.72, 0, 1)),
+    transform var(--ui-duration-base, 260ms) var(--ui-ease-standard, cubic-bezier(0.32, 0.72, 0, 1));
+}
+
+.pie-arriba.visible {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pie-arriba {
+    transform: none;
+  }
+}

@@ -68,7 +68,7 @@
         padding:
           0
           calc(var(--ui-space-4) + env(safe-area-inset-right))
-          calc(var(--ui-space-8) * 2 + env(safe-area-inset-bottom))
+          var(--ui-space-8)
           calc(var(--ui-space-4) + env(safe-area-inset-left));
       }
 
@@ -478,14 +478,6 @@
         color: var(--ui-color-text-muted);
       }
 
-      footer {
-        padding: var(--ui-space-6) 0;
-        border-top: 1px solid var(--ui-color-separator);
-        color: var(--ui-color-text-muted);
-        font-size: var(--ui-font-size-footnote);
-        text-align: center;
-      }
-
       /* Unico momento orquestado: aparicion escalonada de la cabecera */
       @media (prefers-reduced-motion: no-preference) {
         .hero > * {
@@ -658,10 +650,9 @@
         </div>
       </section>
 
-      <footer>
-        dgonmej-ui, librería de componentes Lit. <a href="./playground.html">Prueba todas las opciones en el playground</a>.
-      </footer>
     </main>
+
+    <footer id="pie" class="pie" style="--pie-max: 1120px"></footer>
 
     <!-- Capas compartidas por las vistas previas -->
     <dgonmej-ui-dialog
@@ -686,5 +677,6 @@
 
     <script type="module" src="../src/index.js"></script>
     <script type="module" src="./demo.js"></script>
+    <script type="module" src="./pie.js"></script>
   </body>
 </html>
