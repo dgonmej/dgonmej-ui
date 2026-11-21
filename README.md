@@ -30,6 +30,9 @@ comentario de su clase, en `src/components/<nombre>/`.
 
 ## Demo y playground
 
+En línea en **[ui.dgonmej.com](https://ui.dgonmej.com/)** (demo) y
+**[ui.dgonmej.com/playground.html](https://ui.dgonmej.com/playground.html)** (playground). En local:
+
 ```bash
 npm install
 npm run dev
