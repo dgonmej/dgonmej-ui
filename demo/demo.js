@@ -1,5 +1,8 @@
 // Foto de ejemplo incluida en la demo (Vite la copia y le pone huella al compilar)
-const PROFILE_PHOTO = new URL('./profile.jpg', import.meta.url).href;
+// Recursos de ejemplo: ilustración de avatar, audio propio (sin derechos) y portada genérica
+const PROFILE_PHOTO = new URL('./avatar.png', import.meta.url).href;
+const SAMPLE_AUDIO = new URL('./audio/ejemplo.m4a', import.meta.url).href;
+const SAMPLE_ARTWORK = new URL('./audio/portada.jpg', import.meta.url).href;
 
 /*
  * Portada de la demo: galeria de componentes por categorias (con vista previa en vivo y
@@ -30,7 +33,7 @@ const CATALOG = [
         id: 'avatar',
         name: 'Avatar',
         desc: 'Foto o iniciales sobre gradiente, estado, aro de acento y forma de gota animada.',
-        preview: `<dgonmej-ui-avatar size="lg" ring name="Diego González" src="${PROFILE_PHOTO}"></dgonmej-ui-avatar><dgonmej-ui-avatar size="lg" name="Ana Pérez" status="online"></dgonmej-ui-avatar><dgonmej-ui-avatar size="lg" shape="rounded" name="Luis Martín"></dgonmej-ui-avatar><dgonmej-ui-avatar size="lg" shape="blob" ring name="Marta Ruiz"></dgonmej-ui-avatar>`,
+        preview: `<dgonmej-ui-avatar size="lg" ring name="Alex Moreno" src="${PROFILE_PHOTO}"></dgonmej-ui-avatar><dgonmej-ui-avatar size="lg" name="Ana Pérez" status="online"></dgonmej-ui-avatar><dgonmej-ui-avatar size="lg" shape="rounded" name="Luis Martín"></dgonmej-ui-avatar><dgonmej-ui-avatar size="lg" shape="blob" ring name="Marta Ruiz"></dgonmej-ui-avatar>`,
       },
       {
         id: 'icon',
@@ -206,7 +209,7 @@ const CATALOG = [
         name: 'Reproductor',
         desc: 'Radio en directo o pistas; tarjeta o mini reproductor.',
         block: true,
-        preview: `<dgonmej-ui-audio-player variant="compact" live heading="MínimaFM 97.9" subheading="La voz del valle" src="https://stream-176.zeno.fm/fjmbxsddqv1uv" artwork="https://dgonmej.github.io/minimafm/images/logos/logo-minimafm.png"></dgonmej-ui-audio-player>`,
+        preview: `<dgonmej-ui-audio-player variant="compact" live heading="Radio Aurora 101.5" subheading="Música y voces de la ciudad" src="${SAMPLE_AUDIO}" artwork="${SAMPLE_ARTWORK}"></dgonmej-ui-audio-player>`,
       },
       {
         id: 'theme-toggle',
@@ -255,8 +258,8 @@ const DATA = {
     { value: 'radio', label: 'Radio', icon: 'radio' },
   ],
   'mini-timeline': [
-    { kind: 'education', period: '2016 – 2018', title: 'Desarrollo de Aplicaciones Web' },
-    { kind: 'work', period: '2021', title: 'TECH Education', current: true },
+    { kind: 'education', period: '2014 – 2018', title: 'Grado en Diseño Digital' },
+    { kind: 'work', period: '2022', title: 'Estudio Brisa', current: true },
   ],
 };
 
@@ -365,63 +368,48 @@ function buildExamples() {
   ];
   $('tabs').items = [...DATA.tabs, { value: 'settings', label: 'Ajustes', icon: 'sliders' }];
 
-  // Trayectoria (datos de whoami)
+  // Trayectoria de ejemplo (persona inventada)
   $('life').items = [
-    { milestone: true, kind: 'start', title: 'Mi trayectoria', description: 'Empieza el viaje' },
+    { milestone: true, kind: 'start', title: 'La trayectoria de Alex', description: 'Empieza el viaje' },
     {
       kind: 'education',
-      period: '2013 – 2015',
-      title: 'Sistemas Microinformáticos y Redes',
-      description: 'Ciclo de grado medio: instalar, configurar y mantener sistemas y redes locales.',
-      highlights: ['DNS y DHCP', 'Windows Server', 'Linux', 'Scripting'],
+      period: '2012 – 2014',
+      title: 'Bachillerato de Artes',
+      description: 'Dibujo, fotografía y las primeras maquetas de páginas web.',
+      highlights: ['Dibujo técnico', 'Fotografía', 'Historia del arte'],
     },
     {
-      kind: 'work',
-      period: '2015',
-      title: 'Prácticas en Inerza',
-      description: 'Prácticas en empresa del ciclo formativo.',
-      highlights: ['Asistencia técnica', 'Mantenimiento de hardware'],
+      kind: 'education',
+      period: '2014 – 2018',
+      title: 'Grado en Diseño Digital',
+      description: 'Diseño de interfaces, tipografía y prototipado.',
+      highlights: ['Diseño de interfaces', 'Tipografía', 'Prototipado', 'Accesibilidad'],
     },
     {
       kind: 'travel',
-      period: '2015',
-      title: 'Erasmus+ en Italia',
-      description: 'Beca Erasmus+ para parte de las prácticas en Vegan Solutions S.R.L.',
-      highlights: ['Asistencia técnica', 'Diseño de componentes web', 'Testing'],
-    },
-    {
-      kind: 'education',
-      period: '2016 – 2018',
-      title: 'Desarrollo de Aplicaciones Web',
-      description: 'Ciclo de grado superior centrado en diseñar, desarrollar y mantener sitios web.',
-      highlights: ['Bases de datos', 'Maquetación', 'Java, C#, .NET y PHP', 'JavaScript y React'],
+      period: '2017',
+      title: 'Intercambio en Lisboa',
+      description: 'Un semestre de estudios con proyectos para pequeños comercios del barrio.',
+      highlights: ['Identidad visual', 'Fotografía'],
     },
     {
       kind: 'work',
-      period: '2018 – 2020',
-      title: 'Desarrollador en Open Data Security',
-      description: 'Proyectos de ciberseguridad con Kanban y Scrum.',
-      highlights: ['Backend', 'App móvil', 'Frontend', 'Pasarelas de pago', 'Despliegue'],
+      period: '2018 – 2022',
+      title: 'Diseñador en Nube Creativa',
+      description: 'Webs y aplicaciones para clientes de turismo y cultura.',
+      highlights: ['Diseño web', 'App móvil', 'Sistemas de diseño'],
       links: [
-        { label: 'secureaccess.com', href: 'https://secureaccess.com' },
-        { label: 'metacleaner.com', href: 'https://metacleaner.com' },
+        { label: 'ejemplo.com', href: 'https://example.com' },
+        { label: 'portfolio.example', href: 'https://example.org' },
       ],
     },
     {
       kind: 'work',
-      period: '2020 – 2021',
-      title: 'Desarrollador en Transformación Digital',
-      description: 'Proyectos de marketing, gestión y aplicaciones móviles para empresas.',
-      highlights: ['Backend', 'App móvil', 'Frontend', 'Documentación'],
-    },
-    {
-      kind: 'work',
-      period: '2021',
+      period: '2022',
       current: true,
-      title: 'TECH Education Rights & Technologies',
-      description:
-        'Responsable del frontend de la intranet con Angular (v12–v17) y una librería privada de web components. Formación interna y onboarding del equipo.',
-      highlights: ['Angular', 'Web components', '.NET APIs', 'Liderazgo técnico'],
+      title: 'Diseñador de producto en Estudio Brisa',
+      description: 'Responsable del sistema de diseño y de la experiencia de la app de reservas.',
+      highlights: ['Sistema de diseño', 'Investigación con usuarios', 'Prototipos'],
     },
     { milestone: true, kind: 'end', title: 'Y esto no acaba aquí', description: 'Continuará…' },
   ];

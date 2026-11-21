@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
-import { copyFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync } from 'node:fs';
 
 /**
  * Compila la demo y el playground como web estatica (lab.dgonmej.com).
@@ -11,10 +11,13 @@ export default defineConfig({
   base: '/',
   plugins: [
     {
-      // La foto de ejemplo se usa en atributos de componentes que Vite no procesa: se copia tal cual
-      name: 'copiar-foto-demo',
+      // Los recursos de ejemplo (avatar, audio y portada) se usan en atributos de componentes que
+      // Vite no procesa: se copian tal cual
+      name: 'copiar-recursos-demo',
       closeBundle() {
-        copyFileSync(resolve(__dirname, 'demo/profile.jpg'), resolve(__dirname, 'dist-demo/profile.jpg'));
+        const out = resolve(__dirname, 'dist-demo');
+        mkdirSync(resolve(out, 'audio'), { recursive: true });
+        for (const f of ['avatar.png', 'audio/ejemplo.m4a', 'audio/portada.jpg']) copyFileSync(resolve(__dirname, 'demo', f), resolve(out, f));
       },
     },
   ],

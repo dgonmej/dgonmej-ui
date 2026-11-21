@@ -1,7 +1,10 @@
 import { iconNames } from '../src/components/icon/dgonmej-ui-icon.js';
 
 // Foto de ejemplo incluida en la demo (Vite la copia y le pone huella al compilar)
-const PROFILE_PHOTO = new URL('./profile.jpg', import.meta.url).href;
+// Recursos de ejemplo: ilustración de avatar, audio propio (sin derechos) y portada genérica
+const PROFILE_PHOTO = new URL('./avatar.png', import.meta.url).href;
+const SAMPLE_AUDIO = new URL('./audio/ejemplo.m4a', import.meta.url).href;
+const SAMPLE_ARTWORK = new URL('./audio/portada.jpg', import.meta.url).href;
 
 /*
  * Playground: cada componente declara sus controles y como se pinta.
@@ -49,33 +52,33 @@ const timelineItems = (s) => {
   const items = [
     {
       kind: 'education',
-      period: '2016 – 2018',
-      title: 'Desarrollo de Aplicaciones Web',
-      description: 'Ciclo superior centrado en diseñar, desarrollar y mantener sitios web.',
-      highlights: ['Bases de datos', 'JavaScript', 'PHP'],
-    },
-    {
-      kind: 'work',
-      period: '2018 – 2020',
-      title: 'Desarrollador en Open Data Security',
-      description: 'Proyectos de ciberseguridad con Kanban y Scrum.',
-      highlights: ['Backend', 'Frontend', 'App móvil'],
-      links: [{ label: 'secureaccess.com', href: 'https://secureaccess.com' }],
+      period: '2014 – 2018',
+      title: 'Grado en Diseño Digital',
+      description: 'Diseño de interfaces, tipografía y prototipado.',
+      highlights: ['Interfaces', 'Tipografía', 'Prototipado'],
     },
     {
       kind: 'travel',
-      period: '2015',
-      title: 'Erasmus+ en Italia',
-      description: 'Parte de las prácticas en Vegan Solutions S.R.L.',
-      highlights: ['Testing', 'Componentes web'],
+      period: '2017',
+      title: 'Intercambio en Lisboa',
+      description: 'Un semestre de estudios y proyectos con comercios del barrio.',
+      highlights: ['Identidad visual', 'Fotografía'],
     },
     {
       kind: 'work',
-      period: '2021',
+      period: '2018 – 2022',
+      title: 'Diseñador en Nube Creativa',
+      description: 'Webs y aplicaciones para clientes de turismo y cultura.',
+      highlights: ['Diseño web', 'App móvil', 'Sistemas de diseño'],
+      links: [{ label: 'ejemplo.com', href: 'https://example.com' }],
+    },
+    {
+      kind: 'work',
+      period: '2022',
       current: s.current,
-      title: 'TECH Education Rights & Technologies',
-      description: 'Responsable del frontend de la intranet con Angular y web components.',
-      highlights: ['Angular', 'Web components', 'Liderazgo técnico'],
+      title: 'Diseñador de producto en Estudio Brisa',
+      description: 'Responsable del sistema de diseño de la app de reservas.',
+      highlights: ['Sistema de diseño', 'Investigación', 'Prototipos'],
     },
   ].map((i) => ({
     ...i,
@@ -83,7 +86,7 @@ const timelineItems = (s) => {
     links: s.links ? i.links : undefined,
   }));
   if (s.milestones) {
-    items.unshift({ milestone: true, kind: 'start', title: 'Mi trayectoria', description: 'Empieza el viaje' });
+    items.unshift({ milestone: true, kind: 'start', title: 'La trayectoria de Alex', description: 'Empieza el viaje' });
     items.push({ milestone: true, kind: 'end', title: 'Y esto no acaba aquí', description: 'Continuará…' });
   }
   return items;
@@ -159,7 +162,7 @@ const components = [
       select('status', 'Estado', [opt('', 'Ninguno'), opt('online', 'Conectado'), opt('away', 'Ausente'), opt('busy', 'Ocupado')], 'online'),
       bool('ring', 'Aro de acento (con la gota, gira)', true),
       bool('photo', 'Con foto', true, { rebuild: true, attr: false }),
-      text('name', 'Nombre', 'Diego González'),
+      text('name', 'Nombre', 'Alex Moreno'),
     ],
     defaults: { size: 'md', status: '', ring: false },
     markup: (s, a) =>
@@ -209,7 +212,7 @@ const components = [
         'email'
       ),
       text('label', 'Etiqueta', 'Correo'),
-      text('value', 'Valor', 'diego@dgonmej.dev', { live: 'prop' }),
+      text('value', 'Valor', 'alex@example.com', { live: 'prop' }),
       text('placeholder', 'Placeholder', 'tu@correo.com'),
       text('helper', 'Ayuda', 'Solo lo usaremos para la factura'),
       text('error', 'Error', ''),
@@ -609,13 +612,13 @@ const components = [
       seg('variant', 'Variante', [opt('card', 'Tarjeta'), opt('compact', 'Compacto')], 'card'),
       bool('live', 'En directo', true),
       bool('artwork', 'Portada', true, { rebuild: true, attr: false }),
-      text('heading', 'Título', 'MínimaFM 97.9'),
-      text('subheading', 'Subtítulo', 'La voz del valle, tu voz'),
+      text('heading', 'Título', 'Radio Aurora 101.5'),
+      text('subheading', 'Subtítulo', 'Música y voces de la ciudad'),
     ],
     frame: 'card',
     markup: (s, a) =>
-      `<dgonmej-ui-audio-player${a('heading', 'subheading', 'variant', 'live')}\n  src="https://stream-176.zeno.fm/fjmbxsddqv1uv"${
-        s.artwork ? '\n  artwork="https://dgonmej.github.io/minimafm/images/logos/logo-minimafm.png"' : ''
+      `<dgonmej-ui-audio-player${a('heading', 'subheading', 'variant', 'live')}\n  src="${SAMPLE_AUDIO}"${
+        s.artwork ? `\n  artwork="${SAMPLE_ARTWORK}"` : ''
       }\n></dgonmej-ui-audio-player>`,
   },
   {
@@ -775,8 +778,8 @@ function renderControls() {
 
 // Valores de ejemplo validos para cada tipo de campo
 const SAMPLE_VALUES = {
-  text: 'Diego González',
-  email: 'diego@dgonmej.dev',
+  text: 'Alex Moreno',
+  email: 'alex@example.com',
   password: 'contraseña-secreta',
   number: '42',
   search: 'facturas pendientes',
