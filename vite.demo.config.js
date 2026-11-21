@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { copyFileSync, mkdirSync } from 'node:fs';
 
 /**
- * Compila la demo y el playground como web estatica (lab.dgonmej.com).
+ * Compila la demo y el playground como web estatica (ui.dgonmej.com).
  * A diferencia de la libreria, aqui Lit si va incluido: es una pagina final.
  */
 export default defineConfig({

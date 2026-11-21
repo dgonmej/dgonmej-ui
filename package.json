@@ -4,7 +4,7 @@
   "description": "Apple-inspired web components built with Lit. Framework-agnostic, themeable with design tokens, dark mode and accessibility built in.",
   "license": "MIT",
   "author": "Diego González",
-  "homepage": "https://github.com/dgonmej/dgonmej-ui#readme",
+  "homepage": "https://ui.dgonmej.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dgonmej/dgonmej-ui.git"
