@@ -33,6 +33,7 @@
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Playground de dgonmej-ui", "url": "https://lab.dgonmej.com/playground.html", "isPartOf": {"@type": "WebSite", "name": "dgonmej-ui", "url": "https://lab.dgonmej.com/"}}</script>
     <link rel="stylesheet" href="../src/tokens/tokens.css" />
     <link rel="stylesheet" href="./phone.css" />
+    <link rel="stylesheet" href="./marca.css" />
     <style>
       *,
       *::before,
@@ -387,9 +388,10 @@
   </head>
   <body>
     <dgonmej-ui-nav-bar heading="Playground" style="--ui-nav-bar-max-width: 1408px">
-      <dgonmej-ui-button slot="leading" variant="ghost" id="back">
-        <dgonmej-ui-icon name="chevron-left"></dgonmej-ui-icon>Demo
-      </dgonmej-ui-button>
+      <a slot="leading" class="brand brand-compacta" href="./" aria-label="dgonmej-ui, volver a la demo">
+        <span class="brand-mark" aria-hidden="true"><span>dg</span></span>
+        <span class="brand-name" aria-hidden="true">dgonmej<span class="brand-ui">ui</span></span>
+      </a>
       <dgonmej-ui-theme-toggle slot="trailing" compact></dgonmej-ui-theme-toggle>
     </dgonmej-ui-nav-bar>
 

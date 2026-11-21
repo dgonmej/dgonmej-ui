@@ -973,7 +973,6 @@ document.querySelectorAll('[data-copy]').forEach((btn) =>
   })
 );
 
-$('back').addEventListener('ui-click', () => (location.href = './'));
 
 // ---------- Inicio ----------
 await customElements.whenDefined('dgonmej-ui-segmented-control');

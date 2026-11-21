@@ -33,6 +33,7 @@
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareSourceCode", "name": "dgonmej-ui", "description": "Librería de componentes web con Lit, inspirada en Apple: tokens de diseño, modo oscuro y accesibilidad de serie.", "url": "https://lab.dgonmej.com/", "codeRepository": "https://github.com/dgonmej/dgonmej-ui", "programmingLanguage": "JavaScript", "runtimePlatform": "Navegador web", "license": "https://opensource.org/licenses/MIT", "author": {"@type": "Person", "name": "Diego González", "url": "https://whoami.dgonmej.com/"}, "sameAs": ["https://www.npmjs.com/package/dgonmej-ui"]}</script>
     <link rel="stylesheet" href="../src/tokens/tokens.css" />
     <link rel="stylesheet" href="./phone.css" />
+    <link rel="stylesheet" href="./marca.css" />
     <style>
       *,
       *::before,
@@ -496,7 +497,11 @@
     </style>
   </head>
   <body>
-    <dgonmej-ui-nav-bar heading="dgonmej-ui" style="--ui-nav-bar-max-width: 1120px">
+    <dgonmej-ui-nav-bar style="--ui-nav-bar-max-width: 1120px">
+      <a slot="leading" class="brand" href="#" aria-label="dgonmej-ui, ir al inicio">
+        <span class="brand-mark" aria-hidden="true"><span>dg</span></span>
+        <span class="brand-name" aria-hidden="true">dgonmej<span class="brand-ui">ui</span></span>
+      </a>
       <dgonmej-ui-button slot="trailing" variant="ghost" size="small" id="nav-playground" label="Playground">
         <dgonmej-ui-icon name="sliders" size="16"></dgonmej-ui-icon><span class="wide-only">Playground</span>
       </dgonmej-ui-button>
