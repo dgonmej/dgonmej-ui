@@ -7,7 +7,7 @@
 
 ## Librería dgonmej-ui (ui.dgonmej.com)
 
-- [x] **UI-01. Datos de ejemplo neutros en la demo y el playground** (`dgonmej-ui`)
+- [x] **UI-01. Datos de ejemplo neutros en la demo y el playground** (`dgonmej-ui`): La demo y el playground de dgonmej-ui usan datos de ejemplo neutros en vez de Mínima FM.
   - Cerrada el 23-11-2026
   - Hecho el 2026-11-21: persona inventada (Alex Moreno y Lucía Herrera) con su trayectoria, avatar con la ilustración de whoami (`demo/avatar.png`), y reproductor «Radio Aurora 101.5» con un audio propio de 24 s generado para la demo (sin derechos de terceros, `demo/audio/ejemplo.m4a`) y una portada genérica. Se mantiene la autoría y la imagen al compartir. Subido y desplegado el 2026-11-21.
   - Quitar las referencias a Mínima FM con el logo antiguo: el reproductor de la demo (`demo/index.html`, «MínimaFM 97.9» y «Reproductor de MínimaFM»), su ejemplo en `demo/demo.js` y el título por defecto en `demo/playground.js`. Además el `artwork` apunta a la web antigua de GitHub Pages (`dgonmej.github.io/minimafm/...`), que ya no existe.
