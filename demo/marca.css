@@ -1,10 +1,14 @@
-/* Marca de la barra: la misma pieza "dg" del favicon (fondo oscuro con brillo verde azulado)
-   y el nombre, con "ui" en una pastilla del mismo degradado. Colores de la familia dgonmej.
+/* Marca de la barra: la misma pieza "dg" del favicon (fondo oscuro con el brillo «Lima», el color de
+   ui en la familia dgonmej: ver Code/brand) y el nombre, con "ui" en una pastilla del mismo degradado,
+   en Sora. Solo la marca: los componentes de la demo enseñan el tema por defecto de la librería.
    La comparten la demo y el playground. */
+@import '@fontsource/sora/700.css';
+@import '@fontsource/sora/800.css';
+
 .brand {
   --brand-ink: #0b1416;
-  --brand-from: #5eead4;
-  --brand-to: #38bdf8;
+  --brand-from: #bef264;
+  --brand-to: #4ade80;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -32,16 +36,16 @@
   border-radius: 9px;
   overflow: hidden;
   background:
-    radial-gradient(90% 90% at 15% 0%, rgb(20 184 166 / 0.6), transparent 70%),
-    radial-gradient(80% 80% at 100% 100%, rgb(14 165 233 / 0.45), transparent 70%),
+    radial-gradient(90% 90% at 15% 0%, rgb(132 204 22 / 0.6), transparent 70%),
+    radial-gradient(80% 80% at 100% 100%, rgb(34 197 94 / 0.45), transparent 70%),
     var(--brand-ink);
   box-shadow:
     inset 0 0 0 1px rgb(255 255 255 / 0.08),
     0 1px 2px rgb(0 0 0 / 0.18),
-    0 4px 12px rgb(20 184 166 / 0.22);
+    0 4px 12px rgb(132 204 22 / 0.22);
 }
 .brand-mark span {
-  font-family: var(--ui-font-family-display);
+  font-family: 'Sora', var(--ui-font-family-display);
   font-size: 17px;
   font-weight: 800;
   letter-spacing: -0.04em;
@@ -56,7 +60,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--ui-font-family-display);
+  font-family: 'Sora', var(--ui-font-family-display);
   font-size: var(--ui-font-size-title3);
   font-weight: 700;
   letter-spacing: -0.02em;
