@@ -1,10 +1,9 @@
-# Avisa de versiones nuevas con pull requests a dev, una vez por semana. Los parches y versiones menores
+# Avisa de versiones nuevas con pull requests a main, una vez por semana. Los parches y versiones menores
 # llegan juntos en un solo PR; cada versión mayor, en el suyo, porque puede romper algo.
 version: 2
 updates:
   - package-ecosystem: npm
     directory: /
-    target-branch: dev
     schedule:
       interval: weekly
       day: monday
@@ -14,6 +13,5 @@ updates:
         update-types: [minor, patch]
   - package-ecosystem: github-actions
     directory: /
-    target-branch: dev
     schedule:
       interval: monthly

@@ -1,11 +1,11 @@
 # Comprueba que el proyecto compila (y pasa tipos y tests donde los hay) en cada pull request y en cada
-# push a dev. main está protegida: solo admite cambios con esta comprobación en verde.
+# push a main. Se trabaja con una rama por tarea y un PR a main, que se fusiona con esta comprobación en verde.
 name: Comprobar
 
 on:
   pull_request:
   push:
-    branches: [dev]
+    branches: [main]
 
 concurrency:
   group: comprobar-${{ github.ref }}
