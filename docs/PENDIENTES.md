@@ -1,6 +1,6 @@
 # Pendientes de Librería
 
-> Generado desde dgonmej-api el 2026-11-23. No lo edites a mano: las tareas se gestionan en el panel (dgonmej.com/admin) o en tasker, y este archivo se vuelve a generar.
+> Generado desde dgonmej-api el 2026-11-24. No lo edites a mano: las tareas se gestionan en el panel (dgonmej.com/admin) o en tasker, y este archivo se vuelve a generar.
 
 - **Estado:** `[ ]` pendiente (1), `[~]` en curso (0), `[x]` hecho (1), `[-]` descartado (0).
 - **Códigos:** **UI** y un número. **Prioridad:** crítica, alta, media o baja (en la primera línea de cada tarea).
