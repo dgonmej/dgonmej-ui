@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Antes de subir: si cambia package-lock.json, comprobar que instala en Linux (scripts/comprobar-lock.sh).
+# Se activa una vez por copia del repo con: git config core.hooksPath .githooks
+while read -r _local_ref local_sha _remote_ref remote_sha; do
+  [ "$local_sha" = 0000000000000000000000000000000000000000 ] && continue
+  if [ "$remote_sha" = 0000000000000000000000000000000000000000 ]; then base=$(git merge-base "$local_sha" origin/main 2>/dev/null || echo "")
+  else base=$remote_sha; fi
+  if [ -z "$base" ] || git diff --name-only "$base" "$local_sha" | grep -qE '(^|/)package-lock\.json$'; then
+    exec scripts/comprobar-lock.sh
+  fi
+done

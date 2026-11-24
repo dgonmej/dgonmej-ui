@@ -196,3 +196,13 @@ npm run build   # genera dist/dgonmej-ui.js
 
 Los iconos son de [Lucide](https://lucide.dev) (licencia ISC); ver
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+## Al clonar el repositorio
+
+Activar el hook que comprueba, antes de cada push que cambie `package-lock.json`, que instala bien en Linux (necesita Docker):
+
+```bash
+git config core.hooksPath .githooks
+```
+
+También se puede lanzar a mano con `npm run comprobar-lock`.
