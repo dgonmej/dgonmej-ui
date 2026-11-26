@@ -1,6 +1,6 @@
 {
   "name": "dgonmej-ui",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Apple-inspired web components built with Lit. Framework-agnostic, themeable with design tokens, dark mode and accessibility built in.",
   "license": "MIT",
   "author": "Diego González",

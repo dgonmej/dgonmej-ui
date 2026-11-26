@@ -104,6 +104,30 @@ export class DgonmejUiTextField extends LitElement {
           0 0 0 3px color-mix(in srgb, var(--_focus) 14%, transparent);
       }
 
+      /*
+       * Autorrelleno (correo o contraseña guardados): el navegador pinta su fondo solo dentro del <input>,
+       * que no llega a los bordes redondeados ni a los iconos, y queda un rectángulo de otro color dentro
+       * del campo. Se tiñe el campo entero con un tinte suave del acento y el <input> se pinta del mismo
+       * color con una sombra interior (el fondo del autorrelleno no se puede quitar, sí tapar).
+       */
+      .field {
+        --_autorrelleno: color-mix(in srgb, var(--ui-color-primary, #0066cc) 9%, var(--ui-color-surface, #fff));
+      }
+      .field:has(input:-webkit-autofill) {
+        background: var(--_autorrelleno);
+      }
+      .field:has(input:autofill) {
+        background: var(--_autorrelleno);
+      }
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0 1000px var(--_autorrelleno) inset;
+        box-shadow: 0 0 0 1000px var(--_autorrelleno) inset;
+        -webkit-text-fill-color: var(--ui-color-text, #1d1d1f);
+        caret-color: var(--ui-color-primary, #0066cc);
+      }
+
       :host([invalid]) .field {
         box-shadow: inset 0 0 0 1px var(--ui-color-danger, #c4001a);
       }
