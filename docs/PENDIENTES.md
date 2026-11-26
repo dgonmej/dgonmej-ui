@@ -2,7 +2,7 @@
 
 > Generado desde dgonmej-api el 2026-11-26. No lo edites a mano: las tareas se gestionan en el panel (dgonmej.com/admin) o en tasker, y este archivo se vuelve a generar.
 
-- **Estado:** `[ ]` pendiente (1), `[~]` en curso (0), `[x]` hecho (1), `[-]` descartado (0).
+- **Estado:** `[ ]` pendiente (1), `[~]` en curso (0), `[x]` hecho (2), `[-]` descartado (0).
 - **Códigos:** **UI** y un número. **Prioridad:** crítica, alta, media o baja (en la primera línea de cada tarea).
 
 ## Librería dgonmej-ui (ui.dgonmej.com)
@@ -23,3 +23,13 @@
   - Reescribir el historial con git filter-repo (quitar la ruta o rutas de la foto), forzar la subida de todas las ramas y etiquetas (v0.1.x) y pedir a GitHub que purgue la caché si hace falta. Las etiquetas publicadas en npm no cambian de código, pero sus commits sí de hash.
   - Avisar de que los clones existentes quedan desfasados (solo Diego).
   - Hecho cuando: buscar la foto en todo el historial no da resultados y las etiquetas siguen apuntando a commits válidos.
+
+## Sin sección
+
+- [x] **UI-03. Autorrelleno en los campos de texto: teñir el campo entero** (`dgonmej-ui`, `dgonmej-api`, `minimafm-api`, `tasker`): Hecho el 2026-11-26: al autorrellenar correo o contraseña quedaba un rectángulo azul dentro del campo; ahora se tiñe el campo entero. dgonmej-ui 0.1.5.
+  - Prioridad: Media · Cerrada el 26-11-2026
+  - Problema (visto por Diego en el login del panel de dgonmej): el navegador pinta el fondo del autorrelleno solo dentro del <input>, que no llega a los bordes redondeados del campo ni al botón del ojo.
+  - Arreglo en dgonmej-ui-text-field: con :autofill / :-webkit-autofill, el campo (.field:has(...)) se tiñe con color-mix del acento (9 %) y la superficie, y el <input> se tapa del mismo color con una sombra interior (el fondo del autorrelleno no se puede quitar). Claro y oscuro.
+  - PR: https://github.com/dgonmej/dgonmej-ui/pull/10 (publicado en npm como 0.1.5).
+  - Actualizado a 0.1.5 y desplegado en el panel de dgonmej (https://github.com/dgonmej/dgonmej-api/pull/13), el de la radio (https://github.com/dgonmej/minimafm-api/pull/15) y taskER (https://github.com/dgonmej/tasker/pull/7). Las webs sin login lo recibirán con Dependabot.
+  - Comprobado en WebKit que las reglas se aplican y el aspecto simulado; falta verlo con el autorrelleno real en Safari.
