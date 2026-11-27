@@ -5,6 +5,11 @@ import { renderIcon } from '../../shared/icons.js';
 import '../spinner/dgonmej-ui-spinner.js';
 import { t } from '../../shared/i18n.js';
 
+// Reconexion del directo: esperas crecientes y numero de intentos antes de dar el error
+const ESPERA_MIN_MS = 1000;
+const ESPERA_MAX_MS = 15000;
+const INTENTOS = 12;
+
 const fmt = (s) => {
   if (!Number.isFinite(s)) return '0:00';
   const m = Math.floor(s / 60);
@@ -20,6 +25,8 @@ const fmt = (s) => {
  * sistema (pantalla de bloqueo, auriculares) mediante Media Session.
  * Se adapta al ancho de su contenedor (container queries): dale ancho desde fuera
  * (bloque, grid o flex con `flex: 1`); en un flex que ajusta al contenido quedaria a 0.
+ * En directo (`live`), si la emision se corta mientras suena, se reconecta solo: espera 1, 2, 4… hasta
+ * 15 s entre intentos y, tras unos 2 minutos sin exito, muestra el error.
  * Eventos: 'ui-play', 'ui-pause', 'ui-error'
  * Parts: 'player', 'artwork', 'play'
  */
@@ -365,6 +372,16 @@ export class DgonmejUiAudioPlayer extends LitElement {
     this._muted = false;
     this._time = 0;
     this._duration = NaN;
+    // Quien escucha quiere que suene (ha dado a reproducir y no a pausa): solo entonces se reconecta
+    this._wantsPlay = false;
+    this._retries = 0;
+    this._retryTimer = 0;
+    this._retryPending = false;
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    clearTimeout(this._retryTimer);
   }
 
   get _audio() {
@@ -382,9 +399,11 @@ export class DgonmejUiAudioPlayer extends LitElement {
     const audio = this._audio;
     if (!audio || !this.src) return;
     if (this._state === 'playing' || this._state === 'loading') {
-      audio.pause();
+      this._stop();
       return;
     }
+    this._wantsPlay = true;
+    this._retries = 0;
     this._state = 'loading';
     // En directo, recargar para empezar desde el momento actual de la emision
     if (this.live) audio.load();
@@ -473,6 +492,7 @@ export class DgonmejUiAudioPlayer extends LitElement {
           @pause=${this._onPause}
           @waiting=${() => (this._state = 'loading')}
           @error=${this._fail}
+          @ended=${this._onEnded}
           @timeupdate=${(e) => (this._time = e.target.currentTime)}
           @durationchange=${(e) => (this._duration = e.target.duration)}
         ></audio>
@@ -481,6 +501,7 @@ export class DgonmejUiAudioPlayer extends LitElement {
   }
 
   _onPlaying() {
+    this._retries = 0;
     this._state = 'playing';
     this._updateMediaSession();
     this.dispatchEvent(new CustomEvent('ui-play', { bubbles: true, composed: true }));
@@ -488,12 +509,25 @@ export class DgonmejUiAudioPlayer extends LitElement {
 
   _onPause() {
     if (this._state === 'error') return;
+    // Un directo que se corta, o un intento de reconexion que falla, tambien «se pausa»: eso no es una
+    // pausa de quien escucha
+    if (this._cut() || this._retryPending) return;
+    this._wantsPlay = false;
     this._state = 'paused';
     this.dispatchEvent(new CustomEvent('ui-pause', { bubbles: true, composed: true }));
   }
 
+  _onEnded() {
+    if (this._cut()) this._reconnect();
+  }
+
   _fail() {
     if (!this.src) return;
+    if (this.live && this._wantsPlay && this._retries < INTENTOS) {
+      this._reconnect();
+      return;
+    }
+    this._wantsPlay = false;
     this._state = 'error';
     this.dispatchEvent(new CustomEvent('ui-error', { bubbles: true, composed: true }));
   }
@@ -516,6 +550,42 @@ export class DgonmejUiAudioPlayer extends LitElement {
     this._audio.volume = this._volume;
   }
 
+  /** El directo se ha cortado mientras sonaba */
+  _cut() {
+    return this.live && this._wantsPlay && Boolean(this._audio?.ended);
+  }
+
+  /** Vuelve a conectar al directo tras una espera que crece con cada intento */
+  _reconnect() {
+    // 'error' y el fallo de play() llegan juntos: un solo intento por corte
+    if (this._retryPending) return;
+    this._retryPending = true;
+    const wait = Math.min(ESPERA_MIN_MS * 2 ** this._retries, ESPERA_MAX_MS);
+    this._retries += 1;
+    this._state = 'loading';
+    this._retryTimer = setTimeout(async () => {
+      this._retryPending = false;
+      const audio = this._audio;
+      if (!audio || !this._wantsPlay) return;
+      audio.load();
+      try {
+        await audio.play();
+      } catch (err) {
+        if (err.name !== 'AbortError') this._fail();
+      }
+    }, wait);
+  }
+
+  /** Pausa pedida por quien escucha (boton o controles del sistema) */
+  _stop() {
+    this._wantsPlay = false;
+    clearTimeout(this._retryTimer);
+    this._retryPending = false;
+    const audio = this._audio;
+    if (audio && !audio.paused) audio.pause();
+    else if (this._state === 'loading') this._state = 'paused';
+  }
+
   _updateMediaSession() {
     if (!('mediaSession' in navigator)) return;
     navigator.mediaSession.metadata = new MediaMetadata({
@@ -524,7 +594,7 @@ export class DgonmejUiAudioPlayer extends LitElement {
       artwork: this.artwork ? [{ src: this.artwork, sizes: '512x512' }] : [],
     });
     navigator.mediaSession.setActionHandler('play', () => this.toggle());
-    navigator.mediaSession.setActionHandler('pause', () => this._audio.pause());
+    navigator.mediaSession.setActionHandler('pause', () => this._stop());
   }
 }
 
