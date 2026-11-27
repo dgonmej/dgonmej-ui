@@ -2,7 +2,7 @@
 
 > Generado desde dgonmej-api el 2026-11-27. No lo edites a mano: las tareas se gestionan en el panel (dgonmej.com/admin) o en tasker, y este archivo se vuelve a generar.
 
-- **Estado:** `[ ]` pendiente (1), `[~]` en curso (0), `[x]` hecho (3), `[-]` descartado (0).
+- **Estado:** `[ ]` pendiente (1), `[~]` en curso (0), `[x]` hecho (4), `[-]` descartado (1).
 - **Códigos:** **UI** y un número. **Prioridad:** crítica, alta, media o baja (en la primera línea de cada tarea).
 
 ## Librería dgonmej-ui (ui.dgonmej.com)
@@ -42,3 +42,18 @@
   - Versión 0.1.6 (hay que publicarla en npm) y actualizar mothers-day.
   - Hecho cuando: la galería de Mother's Day con 26 fotos no desborda en 320 px y el contador avanza.
   - Hecho el 2026-11-27: PR https://github.com/dgonmej/dgonmej-ui/pull/12, publicada en npm como 0.1.6 y usada en mothers-day (MB-07). Comprobado en WebKit a 320, 375 y 1280 px.
+
+- [x] **UI-05. Reproductor: reconectar el directo si se corta** (`dgonmej-ui`): Hecho el 2026-11-27: el reproductor en directo se reconecta solo si se corta; publicada la 0.1.7 y en uso en la web de la radio.
+  - Prioridad: Alta · Cerrada el 27-11-2026
+  - Antes: si el servidor cortaba la conexión, el audio lanzaba 'ended' y el reproductor se quedaba en pausa, sin volver a intentarlo.
+  - Ahora, solo con `live` y si quien escucha no ha pausado: en 'ended' o 'error' vuelve a cargar tras 1, 2, 4… hasta 15 s; 12 intentos (unos 2 minutos) antes de mostrar el error. La pausa del botón o de los controles del sistema para los intentos.
+  - Probado contra Icecast local (RAD-54): con Icecast parado 10 s, vuelve a sonar solo a los pocos segundos de arrancar.
+  - Hecho cuando: publicada la 0.1.7 en npm y la web de la radio la usa.
+  - Hecho el 2026-11-27: https://github.com/dgonmej/dgonmej-ui/pull/14, publicada en npm la 0.1.7 y la web de la radio la usa (https://github.com/dgonmej/minimafm/pull/12).
+
+- [-] **UI-06. Reproductor: indicador de conexión redondo** (`dgonmej-ui`): Descartado el 2026-11-27: no hace falta tocar la librería; la web de la radio da --ui-radius-scale al reproductor y el spinner sale redondo (RAD-54).
+  - Prioridad: Media · Descartada el 27-11-2026
+  - Antes seguía la redondez global (--ui-radius-scale) y en la web de la radio salía como un cuadrado redondeado.
+  - Ahora el reproductor le pone --ui-radius-scale: 2 al spinner del botón, que lo convierte en disco.
+  - Hecho cuando: publicada la 0.1.8 y la web de la radio la usa.
+  - Descartado: las variables CSS atraviesan el shadow DOM, así que basta con `dgonmej-ui-audio-player { --ui-radius-scale: 1.5 }` en la web que lo usa.
