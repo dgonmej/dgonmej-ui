@@ -1,8 +1,8 @@
 # Pendientes de Librería
 
-> Generado desde dgonmej-api el 2026-11-26. No lo edites a mano: las tareas se gestionan en el panel (dgonmej.com/admin) o en tasker, y este archivo se vuelve a generar.
+> Generado desde dgonmej-api el 2026-11-27. No lo edites a mano: las tareas se gestionan en el panel (dgonmej.com/admin) o en tasker, y este archivo se vuelve a generar.
 
-- **Estado:** `[ ]` pendiente (1), `[~]` en curso (0), `[x]` hecho (2), `[-]` descartado (0).
+- **Estado:** `[ ]` pendiente (1), `[~]` en curso (0), `[x]` hecho (3), `[-]` descartado (0).
 - **Códigos:** **UI** y un número. **Prioridad:** crítica, alta, media o baja (en la primera línea de cada tarea).
 
 ## Librería dgonmej-ui (ui.dgonmej.com)
@@ -33,3 +33,12 @@
   - PR: https://github.com/dgonmej/dgonmej-ui/pull/10 (publicado en npm como 0.1.5).
   - Actualizado a 0.1.5 y desplegado en el panel de dgonmej (https://github.com/dgonmej/dgonmej-api/pull/13), el de la radio (https://github.com/dgonmej/minimafm-api/pull/15) y taskER (https://github.com/dgonmej/tasker/pull/7). Las webs sin login lo recibirán con Dependabot.
   - Comprobado en WebKit que las reglas se aplican y el aspecto simulado; falta verlo con el autorrelleno real en Safari.
+
+- [x] **UI-04. Carrusel con muchas diapositivas: contador en vez de puntos** (`dgonmej-ui`, `mothers-day`): Hecho el 2026-11-27: con más de 7 diapositivas, contador «3 / 26» en vez de puntos. dgonmej-ui 0.1.6, publicada.
+  - Prioridad: Media · Cerrada el 27-11-2026
+  - Problema: dgonmej-ui-carousel pinta un punto (20 px) por diapositiva; con 26 fotos la fila era más ancha que la pantalla y tapaba el pie de la imagen.
+  - Arreglo: a partir de 8 diapositivas, contador «n / total» con cifras tabulares en la misma píldora (con el botón de pausa si hay autoplay) y el texto «Diapositiva n de total» para lectores de pantalla (clave carousel.position en i18n, en español e inglés). Con 7 o menos, los puntos de siempre.
+  - Playground: opción de 12 diapositivas para verlo.
+  - Versión 0.1.6 (hay que publicarla en npm) y actualizar mothers-day.
+  - Hecho cuando: la galería de Mother's Day con 26 fotos no desborda en 320 px y el contador avanza.
+  - Hecho el 2026-11-27: PR https://github.com/dgonmej/dgonmej-ui/pull/12, publicada en npm como 0.1.6 y usada en mothers-day (MB-07). Comprobado en WebKit a 320, 375 y 1280 px.
