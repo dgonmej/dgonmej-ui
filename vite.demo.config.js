@@ -17,7 +17,7 @@ export default defineConfig({
       closeBundle() {
         const out = resolve(__dirname, 'dist-demo');
         mkdirSync(resolve(out, 'audio'), { recursive: true });
-        for (const f of ['avatar.png', 'audio/ejemplo.m4a', 'audio/portada.jpg']) copyFileSync(resolve(__dirname, 'demo', f), resolve(out, f));
+        for (const f of ['avatar.png', 'audio/sample.m4a', 'audio/cover.jpg']) copyFileSync(resolve(__dirname, 'demo', f), resolve(out, f));
       },
     },
   ],

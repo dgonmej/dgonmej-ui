@@ -40,7 +40,7 @@
     "build": "vite build",
     "prepare": "vite build",
     "build:demo": "vite build --config vite.demo.config.js",
-    "comprobar-lock": "scripts/comprobar-lock.sh"
+    "comprobar-lock": "scripts/check-lock.sh"
   },
   "dependencies": {
     "lit": "^3.2.0"

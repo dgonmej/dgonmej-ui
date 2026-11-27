@@ -3,8 +3,8 @@ import { iconNames } from '../src/components/icon/dgonmej-ui-icon.js';
 // Foto de ejemplo incluida en la demo (Vite la copia y le pone huella al compilar)
 // Recursos de ejemplo: ilustración de avatar, audio propio (sin derechos) y portada genérica
 const PROFILE_PHOTO = new URL('./avatar.png', import.meta.url).href;
-const SAMPLE_AUDIO = new URL('./audio/ejemplo.m4a', import.meta.url).href;
-const SAMPLE_ARTWORK = new URL('./audio/portada.jpg', import.meta.url).href;
+const SAMPLE_AUDIO = new URL('./audio/sample.m4a', import.meta.url).href;
+const SAMPLE_ARTWORK = new URL('./audio/cover.jpg', import.meta.url).href;
 
 /*
  * Playground: cada componente declara sus controles y como se pinta.
