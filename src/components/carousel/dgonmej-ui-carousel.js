@@ -2,6 +2,10 @@ import { LitElement, html, css } from 'lit';
 import '../button/dgonmej-ui-button.js';
 import { renderIcon } from '../../shared/icons.js';
 import { t } from '../../shared/i18n.js';
+import { srOnly } from '../../shared/styles.js';
+
+/** A partir de cuántas diapositivas se cambian los puntos por el contador */
+const MAX_PUNTOS = 7;
 
 /**
  * <dgonmej-ui-carousel label="..." autoplay="5">
@@ -13,6 +17,8 @@ import { t } from '../../shared/i18n.js';
  * autoplay: segundos entre diapositivas (0 = desactivado). Se pausa al pasar el raton o
  * enfocar, con el boton de pausa, y no arranca si el usuario prefiere movimiento reducido.
  * Evento: 'ui-change' con detail = { index }
+ * Con más de 7 diapositivas, en vez de un punto por cada una muestra un contador «3 / 26»
+ * (con muchos puntos la fila no cabría en el móvil).
  * Parts: 'viewport', 'dots'
  */
 export class DgonmejUiCarousel extends LitElement {
@@ -24,7 +30,7 @@ export class DgonmejUiCarousel extends LitElement {
     _userPaused: { state: true },
   };
 
-  static styles = css`
+  static styles = [srOnly, css`
     :host {
       display: block;
       /* No imponer el ancho de las diapositivas a su contenedor */
@@ -152,6 +158,21 @@ export class DgonmejUiCarousel extends LitElement {
       transform: scale(1.15);
     }
 
+    /* Contador «3 / 26» en lugar de los puntos cuando hay muchas diapositivas */
+    .contador {
+      display: grid;
+      place-items: center;
+      min-width: 52px;
+      height: 20px;
+      padding: 0 var(--ui-space-2, 8px);
+      color: var(--ui-material-text, #1d1d1f);
+      font-size: var(--ui-font-size-caption, 12px);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
     .pause {
       display: grid;
       place-items: center;
@@ -185,7 +206,7 @@ export class DgonmejUiCarousel extends LitElement {
         transform: none;
       }
     }
-  `;
+  `];
 
   constructor() {
     super();
@@ -275,15 +296,20 @@ export class DgonmejUiCarousel extends LitElement {
                 </svg>
               </dgonmej-ui-button>
               <div class="dots" part="dots">
-                ${Array.from({ length: this._count }, (_, i) => html`
-                  <button
-                    class="dot"
-                    type="button"
-                    aria-label=${t(this, 'carousel.goTo', { n: i + 1, total: this._count })}
-                    aria-current=${i === this.index ? 'true' : 'false'}
-                    @click=${() => this._goTo(i)}
-                  ></button>
-                `)}
+                ${this._count > MAX_PUNTOS
+                  ? html`<span class="contador"
+                      ><span aria-hidden="true">${this.index + 1} / ${this._count}</span
+                      ><span class="sr-only">${t(this, 'carousel.position', { n: this.index + 1, total: this._count })}</span></span
+                    >`
+                  : Array.from({ length: this._count }, (_, i) => html`
+                      <button
+                        class="dot"
+                        type="button"
+                        aria-label=${t(this, 'carousel.goTo', { n: i + 1, total: this._count })}
+                        aria-current=${i === this.index ? 'true' : 'false'}
+                        @click=${() => this._goTo(i)}
+                      ></button>
+                    `)}
                 ${this._canAutoplay
                   ? html`<button
                       class="pause"
