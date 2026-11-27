@@ -539,12 +539,13 @@ const components = [
     tag: 'dgonmej-ui-carousel',
     controls: [
       seg('autoplay', 'Autoplay', [opt('0', 'No'), opt('3', '3 s'), opt('5', '5 s')], '0'),
-      seg('count', 'Diapositivas', ['2', '3', '5'].map((v) => opt(v)), '3', { rebuild: true, attr: false }),
+      // Con más de 7, el carrusel cambia los puntos por el contador «3 / 12»
+      seg('count', 'Diapositivas', ['2', '3', '5', '12'].map((v) => opt(v)), '3', { rebuild: true, attr: false }),
     ],
     frame: 'card',
     markup: (s, a) =>
-      `<dgonmej-ui-carousel label="Destacados"${a('autoplay')}>\n${SLIDES.slice(0, Number(s.count))
-        .map(([t, bg]) => `  <div class="slide" style="background: ${bg}">${t}</div>`)
+      `<dgonmej-ui-carousel label="Destacados"${a('autoplay')}>\n${Array.from({ length: Number(s.count) }, (_, i) => SLIDES[i % SLIDES.length])
+        .map(([t, bg], i) => `  <div class="slide" style="background: ${bg}">${Number(s.count) > SLIDES.length ? `${t} ${i + 1}` : t}</div>`)
         .join('\n')}\n</dgonmej-ui-carousel>`,
   },
   {
